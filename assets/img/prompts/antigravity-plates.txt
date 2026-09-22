@@ -1,0 +1,43 @@
+<task>
+You are the illustrator for a cinematic scrolling website that retells the ancient Egyptian myth of Ra and Apep (the sun god's nightly voyage through the underworld and his battle with the chaos serpent). Your ONLY job is to generate SIX background "scene plates" with your built-in image generation tool, one tool call per image. You are not writing any code and you are not editing the workspace.
+
+Every plate: 16:9 landscape, the highest resolution your image tool offers, opaque, full-bleed (no border). When your tool lets you name the output, use exactly the name given for each plate.
+
+STYLE BIBLE — apply to every plate so all six feel like frames from one film:
+- Medium: cinematic concept-art matte painting with painterly realism; the look of a prestige film title sequence. Not a cartoon, not a video-game splash screen, not a stock photo, not a museum photograph.
+- Subject accuracy: ancient Egyptian New Kingdom iconography rendered with archaeological plausibility (tomb-painting motifs brought to life), never fantasy kitsch.
+- Palette (strict): near-black and deep lapis-lazuli indigo shadows; molten gold and amber highlights; carnelian red-orange reserved for the serpent and for chaos; tiny touches of turquoise faience. No purple, no neon, no green tint.
+- Light: one dominant warm light source; strong chiaroscuro; volumetric haze and god-rays; deep clean blacks.
+- Texture: subtle 35mm film grain, soft atmospheric depth; no HDR crunch, no oversharpening.
+- Absolutely no text of any kind: no hieroglyphs, no letters, no numbers, no captions, no watermark, no signature, no border, no frame, no UI.
+- Composition for web: keep the key subject inside the central 50% of the width (the outer quarters get cropped on phones). Keep the top ~15% and bottom ~15% of the frame comparatively dark and calm so the image can fade into a black page.
+
+PLATE 1 — name: sky_dusk
+A vast empty sunset sky over Egypt. SKY ONLY: no land, no horizon line, no sun disk visible, no birds. The brightest molten-gold glow sits at the bottom centre of the frame, as if the sun were just below the bottom edge; long streaks of high cirrus cloud catch carnelian-red and amber light and radiate outward from that bottom-centre glow; the colour climbs through burnt orange into deep lapis-indigo at the top, where the first few stars appear. (Exception to the composition rule: here the bottom centre is the brightest area.)
+
+PLATE 2 — name: duat
+The Duat, the Egyptian underworld, seen from deck level of a boat on a black subterranean river: an immense cavern whose walls vanish into darkness. Ahead, in the centre, a colossal gate: two towering pylon-shaped stone gate towers flanking a narrow passage, and on top of each tower an upright rearing stone cobra wreathed in fire. Beyond it a second and a third gate recede into haze, each faintly glowing. The only light is a warm gold glow coming from behind the viewer (the unseen sun boat), gilding the near water ripples and the faces of the gate towers. Drifting embers and low mist over the water. Carved surfaces show worn, indistinct relief figures lost in shadow, no legible writing.
+
+PLATE 3 — name: apep
+Apep (Apophis), the colossal chaos serpent of Egyptian myth, rising from a black underworld river. Enormous coils, each as thick as a temple column, arc out of the water and recede into the darkness so the scale reads as monstrous. The serpent's head, in the upper middle of the frame, turns toward the viewer with one visible burning carnelian-red eye and a faint red glow between the scales of its throat. Scales like knapped black flint and obsidian with dull bronze edges; water pouring off the coils; low red mist. A tiny golden glimmer of a distant boat in the lower centre gives scale. Mostly darkness; the red eye is the brightest point in the image.
+
+PLATE 4 — name: battle
+The nightly battle. Left of centre: the high lotus-blossom prow of a golden papyrus-shaped sun boat. On the prow stands the god Set, seen in three-quarter view from behind and mostly in silhouette: a tall muscular male figure in a kilt with the head of the Set-animal (a long down-curved snout and tall, squared-off upright ears — NOT a jackal). With both hands he drives a long bronze-tipped spear downward into the gaping fanged mouth of the colossal serpent Apep, which rears out of the black water right of centre, coils thrashing. An explosion of golden sparks and carnelian-red embers where the spear strikes. Radiant gold light floods in from behind Set (from the sun god's shrine, out of frame to the left), rim-lighting him. Spray, smoke and embers everywhere; dynamic diagonal composition; a frozen peak-action moment.
+
+PLATE 5 — name: ritual
+Night inside an ancient Egyptian temple hypostyle hall (Karnak): massive papyrus-bundle columns rising into darkness. In the centre, three shaven-headed priests in white linen kilts, one wearing a leopard-skin mantle, stand around a low bronze brazier. In the flames lies a small red wax figure of a coiled serpent, melting, pierced by a small knife. The firelight is the only warm light source and throws long shadows up the columns; smoke rises in a column toward a thin shaft of pre-dawn blue light from a high window. Solemn, secretive mood. Column surfaces show worn, indistinct relief figures lost in shadow, no legible writing.
+
+PLATE 6 — name: sky_dawn
+A vast empty dawn sky over Egypt. SKY ONLY: no land, no horizon, no sun disk, no birds. A brilliant white-gold radiance at the bottom centre, as if the sun were about to rise from just below the bottom edge; clean rays fan upward; thin clouds lit gold and pale apricot from beneath; the sky climbs from luminous pale gold through soft turquoise-blue to a fading deep lapis at the very top, with the last star or two. It should feel like a first breath: clear, fresh, triumphant. (Exception to the composition rule: here the bottom centre is the brightest area and the image is bright overall.)
+</task>
+
+<action_safety>
+This run is headless: any request to write, move, copy or delete files in the workspace, or to run a shell command, will be auto-denied and will abort the whole run. So do NOT attempt any of those. Do not create or edit any file yourself. Only call your image generation tool, six times, once per plate, and let the tool save each image wherever it saves by default. Do not regenerate a plate more than once. Do not run git.
+</action_safety>
+
+<structured_output_contract>
+End with a report in exactly this shape:
+  1. For each of the six plates, one line: <name> | <absolute path of the saved image file> | <pixel dimensions if known> | generated OK / failed (reason)
+  2. Which image model/tool produced them
+  3. Anything that deviates from the brief (for example text that slipped into an image, or a subject you could not render as described)
+</structured_output_contract>

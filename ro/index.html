@@ -1,0 +1,280 @@
+<!doctype html>
+<html lang="ro" data-theme="dark" data-phase="dusk">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Ra &amp; Apep — războiul soarelui cu șarpele</title>
+  <meta name="description" content="În fiecare noapte, zeul egiptean al soarelui străbătea lumea de dincolo și se lupta cu Apep, șarpele haosului. Întregul mit, spus ca o singură noapte, de la apus la răsărit.">
+  <meta name="theme-color" content="#070b1a">
+  <link rel="alternate" hreflang="en" href="../index.html">
+  <link rel="alternate" hreflang="ro" href="index.html">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gentium+Book+Plus:ital,wght@0,400;0,700;1,400&family=Hepta+Slab:wght@1..900&display=swap">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+Egyptian+Hieroglyphs&display=swap&text=%F0%93%81%9B%F0%93%81%A6%F0%93%82%8B%F0%93%82%9D%F0%93%83%A9%F0%93%85%AA%F0%93%86%91%F0%93%86%97%F0%93%86%99%F0%93%86%A3%F0%93%87%8B%F0%93%87%B3%F0%93%87%BD%F0%93%88%96%F0%93%88%99%F0%93%89%BB%F0%93%8A%83%F0%93%8A%AA%F0%93%8B%B4%F0%93%8C%B7%F0%93%8E%94%F0%93%8F%8F%F0%93%8F%A4">
+
+  <link rel="preload" as="image" href="../assets/img/sky-dusk-2048.webp" imagesrcset="../assets/img/sky-dusk-1376.webp 1376w, ../assets/img/sky-dusk-2048.webp 2048w" imagesizes="100vw">
+  <link rel="stylesheet" href="../tokens.css">
+  <link rel="stylesheet" href="../styles.css">
+  <script>
+    // Înainte de prima randare: stratul cinematografic pornește doar cu JavaScript și cu mișcarea permisă.
+    (function (root) {
+      var saved = null;
+      try { saved = localStorage.getItem('motion'); } catch (e) {}
+      var off = saved ? saved === 'off' : matchMedia('(prefers-reduced-motion: reduce)').matches;
+      root.classList.add('js');
+      root.classList.toggle('fx', !off);
+    })(document.documentElement);
+  </script>
+  <script src="../main.js" defer></script>
+</head>
+<body>
+  <a class="skip" href="#traveller">Sari la poveste</a>
+
+  <div class="ceiling" aria-hidden="true"></div>
+
+  <header class="chrome">
+    <a class="wordmark" href="#dusk">Ra &amp; Apep</a>
+    <div class="chrome__tools">
+      <a class="lang" href="../index.html" hreflang="en" lang="en" aria-label="English">EN</a>
+      <button class="motion" type="button" aria-pressed="true" data-on="Animat" data-off="Static" hidden>Animat</button>
+    </div>
+  </header>
+
+  <nav class="rail" aria-label="Ceasurile nopții">
+    <ol>
+      <li><a href="#duat" aria-label="Ceasul întâi: Duatul">I</a></li>
+      <li aria-hidden="true"></li>
+      <li aria-hidden="true"></li>
+      <li aria-hidden="true"></li>
+      <li aria-hidden="true"></li>
+      <li><a href="#midnight" aria-label="Ceasul al șaselea: miezul nopții">VI</a></li>
+      <li><a href="#seventh-hour" aria-label="Ceasul al șaptelea: bătălia">VII</a></li>
+      <li aria-hidden="true"></li>
+      <li><a href="#ritual" aria-label="Ceasul al nouălea: între timp, pe pământ">IX</a></li>
+      <li aria-hidden="true"></li>
+      <li aria-hidden="true"></li>
+      <li><a href="#dawn" aria-label="Ceasul al doisprezecelea: zorii">XII</a></li>
+    </ol>
+    <span class="rail__sun" aria-hidden="true"></span>
+  </nav>
+
+  <main>
+    <!-- ============ APUSUL ============ -->
+    <section id="dusk" class="scene scene--pin dusk" data-scene="pin" data-hours="0-0" data-phase="dusk" style="--track: 300">
+      <div class="stage">
+        <img class="layer dusk__sky" src="../assets/img/sky-dusk-1376.webp" srcset="../assets/img/sky-dusk-1376.webp 1376w, ../assets/img/sky-dusk-2048.webp 2048w" sizes="100vw" width="1376" height="764" alt="" fetchpriority="high" decoding="async">
+        <div class="layer dusk__night"></div>
+        <div class="layer dusk__stars"></div>
+        <div class="dusk__sunbox"><div class="dusk__sun"></div></div>
+        <img class="dusk__horizon" src="../assets/img/horizon.webp" width="1536" height="487" alt="" decoding="async">
+        <div class="dusk__glow"></div>
+        <img class="dusk__boat" src="../assets/img/barque.webp" width="1503" height="596" alt="" decoding="async">
+        <img class="dusk__reeds" src="../assets/img/reeds.webp" width="1024" height="620" alt="" decoding="async">
+        <div class="layer dusk__seam"></div>
+
+        <div class="dusk__title">
+          <h1>Ra <span class="amp">&amp;</span> Apep</h1>
+          <p class="dusk__premise">Soarele nu răsare pur și simplu. În fiecare noapte trebuie să învingă.</p>
+        </div>
+        <p class="dusk__second">La orizontul de apus, soarele coboară sub lume.</p>
+        <p class="cue"><span>Derulează ca să urmezi soarele</span>
+          <svg viewBox="0 0 12 28" width="12" height="28" aria-hidden="true"><path d="M6 0v26M1 21l5 5 5-5" fill="none" stroke="currentColor" stroke-width="1"/></svg>
+        </p>
+        <p class="sr-only">Ilustrație: o barcă aurie trece prin fața stâncilor din vestul Tebei, în timp ce un soare uriaș apune în spatele lor și apar primele stele.</p>
+      </div>
+    </section>
+
+    <!-- ============ CĂLĂTORUL ============ -->
+    <section id="traveller" class="passage passage--figure scene--through" data-scene="through" data-hours="0-0" data-phase="night">
+      <div class="passage__text">
+        <h2 data-reveal>Soarele e un călător</h2>
+        <p>Pentru egipteni, soarele nu era un obiect. Era un zeu aflat la drum, iar drumul avea o formă. În fiecare dimineață se năștea la orizontul de răsărit drept Khepri, scarabeul care rostogolește pe cer soarele cel nou. La amiază domnea din înaltul cerului ca Ra, cu cap de șoim, încoronat cu discul solar. Spre seară era Atum: un bătrân sprijinit în toiag, coborând spre munții apusului.</p>
+        <p>Făcea traversarea cu barca, pentru că Egiptul era o țară cu un singur drum, iar drumul acela era un fluviu. Barca zilei se numea <i lang="egy-Latn">Mandjet</i>, Barca Milioanelor de Ani. La orizont o părăsea pentru o a doua ambarcațiune, <i lang="egy-Latn">Mesektet</i>, barca nopții.</p>
+        <p>O a doua barcă, fiindcă drumul nu se sfârșea la apus. Continua pe sub lume, de la vest înapoi spre est, printr-o țară pe care niciun om viu n-o văzuse. Tot ce era cu adevărat important în povestea soarelui se petrecea acolo, în întuneric, în timp ce Egiptul dormea.</p>
+        <p class="term"><span class="glyphs" lang="egy" aria-hidden="true">&#x1308B;&#x1309D;&#x131F3;&#x133E4;&#x1305B;</span>
+          <span class="term__body"><b>Ra</b> <span class="translit" lang="egy-Latn">r&#xA725;</span> Cuvântul înseamnă pur și simplu „soare” în egipteană. Ultimul semn este zeul însuși: o figură așezată, cu cap de șoim, purtând discul.</span></p>
+      </div>
+      <div class="passage__figure" aria-hidden="true">
+        <div class="ra__disc"></div>
+        <img class="ra__img" src="../assets/img/ra.webp" width="1022" height="1453" alt="" loading="lazy" decoding="async">
+      </div>
+    </section>
+
+    <!-- ============ DUATUL ============ -->
+    <figure class="plate scene--through" data-scene="through">
+      <img class="plate__img" src="../assets/img/duat-1376.webp" srcset="../assets/img/duat-1376.webp 1376w, ../assets/img/duat-2048.webp 2048w" sizes="100vw" width="1376" height="581" loading="lazy" decoding="async"
+           alt="Văzută de pe puntea unei bărci, pe un fluviu subteran negru: o poartă colosală de piatră, cu câte o cobră în flăcări pe fiecare turn, și alte porți pierzându-se în ceața de dincolo de ea.">
+    </figure>
+
+    <section id="duat" class="passage passage--over" data-hours="1-5" data-phase="night">
+      <div class="passage__text">
+        <h2 data-reveal>Duatul</h2>
+        <p>Egiptenii numeau țara de sub lume Duat. Nu era un iad. Era o geografie: o vale lungă de fluviu, cu maluri, câmpuri și caverne, locuită de zei, de morții cei fericiți și de făpturi care, la lumina zilei, nu aveau nume.</p>
+        <p>Noaptea era împărțită în douăsprezece ceasuri, iar fiecare ceas era un ținut cu poarta lui. Fiecare poartă își avea paznicii, iar paznicii trebuiau strigați pe nume înainte să lase barca să treacă. În mormintele regale din Valea Regilor, întreaga călătorie e pictată de-a lungul pereților, ceas cu ceas, în cărți pe care egiptenii le numeau <cite>Ceea ce se află în Duat</cite> și <cite>Cartea Porților</cite>. Sunt hărți. Un rege mort avea de gând să facă el însuși drumul, ca membru al echipajului soarelui.</p>
+        <p>Intrând, Ra se schimbă. În morminte, soarele nopții e desenat cu cap de berbec și însoțit de un singur cuvânt: <i>Carne</i>. Acum e doar un trup, lipsit de lumina lui, și trebuie purtat. Un șarpe uriaș, pe nume Mehen, își petrece inelele în jurul cabinei ca s-o apere. Nu orice șarpe de aici, din adâncuri, e un dușman.</p>
+        <p>La trecerea bărcii, morții de pe maluri se trezesc. Cât ține un ceas, au lumină, și aer, și glasul zeului lor. Când barca merge mai departe, se culcă la loc, iar textele spun că în urma ei, în întuneric, li se aude bocetul.</p>
+      </div>
+    </section>
+
+    <!-- ============ MIEZUL NOPȚII ============ -->
+    <section id="midnight" class="midnight" data-hours="6-6" data-phase="night">
+      <div class="midnight__inner">
+        <h2 data-reveal>Ceasul al șaselea</h2>
+        <p>La miezul nopții, barca ajunge în cel mai adânc loc din câte există. Aici, pe fundul nopții, zace un leș: trupul lui Osiris, stăpânul morților. Este totodată, stăruie textele, trupul soarelui.</p>
+        <p>Ra și Osiris se întâlnesc și devin, pentru o clipă, un singur zeu. Trupul mort primește un suflet; sufletul istovit primește un trup. Aceasta e taina pentru care există întreaga călătorie: soarele cel bătrân, înnoit în întuneric, ca o sămânță.</p>
+        <p>Este și clipa celei mai mari primejdii. Ceva, în Duat, a așteptat tocmai acest moment.</p>
+      </div>
+    </section>
+
+    <!-- ============ APEP ============ -->
+    <div class="apep scene--through" data-scene="through">
+      <figure class="plate plate--apep">
+        <img class="plate__img" src="../assets/img/apep-1376.webp" srcset="../assets/img/apep-1376.webp 1376w, ../assets/img/apep-2048.webp 2048w" sizes="100vw" width="1376" height="582" loading="lazy" decoding="async"
+             alt="Un șarpe cât un peisaj întreg se ridică din apa neagră, cu inelele arcuindu-se în întuneric și un singur ochi roșu arzând. Departe, jos, licărește o barcă mică, aurie.">
+      </figure>
+      <img class="apep__head" src="../assets/img/apep-head.webp" width="1501" height="864" alt="" aria-hidden="true" loading="lazy" decoding="async">
+    </div>
+
+    <section id="apep" class="passage passage--left" data-hours="6.5-7" data-phase="night">
+      <div class="passage__text">
+        <h2 data-reveal>Apep</h2>
+        <p>Numele lui era Apep; grecii l-au scris Apophis. Textele din morminte îl mai numesc și Cel cu Fața Cumplită. Era un șarpe, iar textele se chinuie să spună cât de mare: bancul de nisip pe care zace în Duat are patru sute cincizeci de coți lungime, adică mult peste două sute de metri, și inelele lui îl umplu în întregime. Nu avea temple și nu avea preoți. În toată istoria Egiptului, nimeni nu i-a adus vreo ofrandă. Nu era zeul a ceva. Era dușmanul a tot.</p>
+        <p>Egiptenii aveau un cuvânt pentru ceea ce era el: <i lang="egy-Latn">isfet</i>. Dezordine, minciună, destrămarea lucrurilor. Opusul ei era <i lang="egy-Latn">maat</i> – adevărul, echilibrul, lumea așa cum s-ar cuveni să fie – iar maat era tocmai ceea ce călătoria lui Ra ținea în mișcare. Apep voia un singur lucru: să oprească barca. Dacă barca se oprea, soarele nu mai răsărea. Iar dacă soarele nu mai răsărea, nu mai existau zile și nicio lume în care să se petreacă.</p>
+        <p>Avea arme. Răgetul lui se rostogolea prin lumea de dincolo ca un tunet. Privirea lui putea țintui locului întregul echipaj, cu zei cu tot, care îl priveau la rândul lor, încremeniți, în timp ce barca plutea în derivă. Iar în al șaptelea ceas al nopții făcea lucrul cel mai simplu și mai cumplit care îi stătea în putere. Căsca gura și bea fluviul. Barca soarelui eșua pe un banc de nisip, în beznă, cu inelele șarpelui ridicându-se de jur împrejur.</p>
+        <p class="term"><span class="glyphs" lang="egy" aria-hidden="true">&#x1327B;&#x132AA;&#x132AA;&#x13199;</span>
+          <span class="term__body"><b>Apep</b> <span class="translit" lang="egy-Latn">&#xA725;&#xA723;pp</span> Numele lui apare prima oară în jurul anului 2100 î.Hr., când piramidele aveau deja câteva secole. Scribii desenau adesea șarpele de la sfârșitul cuvântului cu cuțitele gata înfipte în el, pentru ca nici măcar cuvântul scris să nu poată face rău.</span></p>
+      </div>
+    </section>
+
+    <!-- ============ CEASUL AL ȘAPTELEA ============ -->
+    <section id="seventh-hour" class="scene scene--pin battle" data-scene="pin" data-hours="7-7" data-phase="night" style="--track: 620">
+      <div class="stage">
+        <img class="layer battle__plate" src="../assets/img/battle-1376.webp" srcset="../assets/img/battle-1376.webp 1376w, ../assets/img/battle-2048.webp 2048w" sizes="100vw" width="1376" height="582" loading="lazy" decoding="async"
+             alt="La prora unei bărci aurii, zeul Seth, un bărbat cu botul lung și curbat și urechile înalte și drepte ale animalului sethian, împlântă o suliță în gura căscată a șarpelui uriaș. Din rană țâșnesc scântei și jar.">
+        <div class="layer battle__flash" aria-hidden="true"></div>
+        <div class="layer battle__scrim" aria-hidden="true"></div>
+
+        <div class="battle__text">
+          <h2>Ceasul al șaptelea</h2>
+          <ol class="beats" style="--n: 7">
+            <li class="beat beat--first" style="--i: 0">
+              <p class="beat__lede">Aici se hotărăște soarta nopții. Zeul soarelui nu luptă singur, iar cel mai bun luptător al lui e ultimul zeu în care ar avea cineva încredere.</p>
+            </li>
+            <li class="beat" style="--i: 1">
+              <h3>Seth</h3>
+              <p>La proră stă Seth: zeul furtunilor și al deșertului, ucigașul lui Osiris, însăși întruchiparea violenței. Este și singurul din echipaj pe care privirea șarpelui nu-l poate frânge. În fiecare noapte își înfige bine picioarele în punte și împlântă o suliță în trupul lui Apep. E cel mai bun lucru pe care îl face vreodată.</p>
+            </li>
+            <li class="beat" style="--i: 2">
+              <h3>Isis</h3>
+              <p>În spatele lui, Isis vorbește. Ale ei sunt cuvintele puterii, iar cuvintele își fac lucrarea. Puterea se scurge din șarpe, iar barca eșuată începe să înainteze pe albia secată, trasă numai de magie.</p>
+            </li>
+            <li class="beat" style="--i: 3">
+              <h3>Serket</h3>
+              <p>Serket, zeița-scorpion, îi aruncă șarpelui lațul peste cap și îl strânge. Alții vin cu cuțitele. În morminte, Apep e pictat gata ciopârțit, cu câte o lamă înfiptă în fiecare inel: o imagine făcută anume ca să se adeverească.</p>
+            </li>
+            <li class="beat" style="--i: 4">
+              <h3>Mehen</h3>
+              <p>În jurul cabinei, Mehen își strânge propriile inele. Un șarpe pus împotriva altui șarpe: un zid de solzi vii între dușman și Carnea fără apărare.</p>
+            </li>
+            <li class="beat" style="--i: 5">
+              <h3>Marele Motan</h3>
+              <p>Iar în cărțile de descântece ale morților, Ra luptă el însuși. Ia chipul unui motan uriaș, sub arborele sfânt <i lang="egy-Latn">ished</i> din Heliopolis, țintuiește șarpele sub o labă și îi retează capul cu cuțitul.</p>
+            </li>
+            <li class="beat beat--last" style="--i: 6">
+              <p class="beat__lede">Înving. Înving de fiecare dată. Și nu e niciodată de ajuns, pentru că Apep nu poate muri. Haosul nu e genul de lucru care moare. Până mâine noapte e din nou întreg și așteaptă, în al șaptelea ceas.</p>
+            </li>
+          </ol>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ PE PĂMÂNT ============ -->
+    <section id="ritual" class="ritual" data-scene="through" data-hours="8-11" data-phase="night">
+      <figure class="plate plate--ritual">
+        <img class="plate__img" src="../assets/img/ritual-1376.webp" srcset="../assets/img/ritual-1376.webp 1376w, ../assets/img/ritual-2048.webp 2048w" sizes="(min-width: 64rem) 50vw, 100vw" width="1376" height="582" loading="lazy" decoding="async"
+             alt="Noapte într-o sală de templu cu coloane uriașe. Trei preoți rași în cap, unul într-o blană de leopard, stau în jurul unui vas cu jăratic în care arde un mic șarpe de ceară roșie.">
+      </figure>
+      <div class="passage__text">
+        <h2 data-reveal>Între timp, pe pământ</h2>
+        <p>Egiptenii n-au lăsat lupta aceasta doar în seama zeilor. Dacă supraviețuirea soarelui era, în fiecare noapte, o întrebare deschisă, atunci era treaba tuturor.</p>
+        <p>Un papirus aflat astăzi la British Museum păstrează o slujbă de templu numită <cite>Cartea doborârii lui Apep</cite>. Potrivit papirusului, se oficia zi de zi în templul lui Amon-Ra de la Karnak, iar îndrumările ei sunt cât se poate de directe. Fă un șarpe din ceară. Scrie-i numele pe el cu cerneală verde. Apoi fă-i cerii ce îi fac zeii șarpelui în Duat. Capitolele cărții sunt chiar lista ei de porunci:</p>
+        <ol class="acts">
+          <li class="act">Scuiparea lui Apep</li>
+          <li class="act">Pângărirea lui Apep cu piciorul stâng</li>
+          <li class="act">Luarea lăncii pentru a-l lovi pe Apep</li>
+          <li class="act">Ferecarea lui Apep</li>
+          <li class="act">Luarea cuțitului pentru a-l lovi pe Apep</li>
+          <li class="act">Punerea focului peste Apep</li>
+        </ol>
+        <p>Uneori primejdia se arăta la față. O furtună care întuneca cerul în plină amiază, pământul cutremurându-se, o beznă bruscă în miezul zilei: acestea erau ceasurile în care Apep câștiga. Atunci ritualul se săvârșea cu tot ce avea templul mai de preț și, mai devreme sau mai târziu, lumina se întorcea. Se întorcea de fiecare dată. Asta era dovada că ritualul funcționa.</p>
+      </div>
+    </section>
+
+    <!-- ============ CEASUL DIN URMĂ ============ -->
+    <section id="dawn" class="passage passage--centre" data-hours="11-12" data-phase="night">
+      <div class="passage__text">
+        <h2 data-reveal>Ceasul din urmă</h2>
+        <p>În ultimul ceas al nopții, barca ajunge la încă un șarpe: un aliat, uriaș, al cărui nume înseamnă Viața Zeilor. Echipajul apucă funia de remorcare și trage barca înăuntrul lui, intrând pe la coadă. Textele spun că soarele și toți cei care îl însoțesc intră bătrâni și cărunți și ies pe gură ca niște prunci nou-născuți.</p>
+        <p>Apoi poarta de răsărit stă deschisă. Khepri, scarabeul, pune umărul și rostogolește soarele cel tânăr peste marginea lumii. Shu, văzduhul, îl ridică deasupra ei. Pe ogoarele de lângă fluviu, cineva ridică ochii și vede o dimineață obișnuită.</p>
+      </div>
+    </section>
+
+    <section class="scene scene--pin dawn" data-scene="pin" data-rest="1" data-hours="12-12" data-phase="dawn" style="--track: 300">
+      <div class="stage">
+        <img class="layer dawn__sky" src="../assets/img/sky-dawn-1376.webp" srcset="../assets/img/sky-dawn-1376.webp 1376w, ../assets/img/sky-dawn-2048.webp 2048w" sizes="100vw" width="1376" height="764" alt="" loading="lazy" decoding="async">
+        <div class="layer dawn__night"></div>
+        <div class="dawn__sun"></div>
+        <img class="dawn__khepri" src="../assets/img/khepri.webp" width="1105" height="956" alt="" loading="lazy" decoding="async">
+        <img class="dawn__horizon" src="../assets/img/horizon.webp" width="1536" height="487" alt="" loading="lazy" decoding="async">
+        <div class="layer dawn__seam"></div>
+        <p class="dawn__line">N-a fost niciodată obișnuită. <span>A fost câștigată.</span></p>
+        <p class="sr-only">Ilustrație: soarele răsare peste stâncile de la răsărit, ridicat de Khepri, un scarabeu înaripat din aur și lapislazuli, iar cerul nopții se preschimbă în zi.</p>
+      </div>
+    </section>
+
+    <!-- ============ DUPĂ ============ -->
+    <section id="after" class="after" data-theme="light" data-hours="12-12" data-phase="day">
+      <div class="passage__text">
+        <h2 data-reveal>Ce spune povestea</h2>
+        <p>Cele mai multe mitologii își așază marea bătălie la începutul timpului sau la sfârșitul lui. Egiptul a așezat-o în mijlocul fiecărei nopți. Creația nu era un act încheiat. Lumea era un loc mic și luminat, cu haosul de jur împrejur, iar ordinea nu era starea firească a lucrurilor. Trebuia făcută din nou în fiecare zi, de zei și de oameni, împotriva unui dușman care putea fi învins, dar niciodată ucis.</p>
+        <p>E o idee mai grea decât pare și mai modernă decât pare. Nimic bun nu durează de la sine. Tot ce merită păstrat trebuie îngrijit, zi de zi. Soarele a răsărit în dimineața aceasta, iar undeva sub orizont șarpele e deja din nou întreg.</p>
+      </div>
+
+      <div class="after__grid">
+        <section class="glossary" aria-labelledby="glossary-h">
+          <h3 id="glossary-h">Cuvintele</h3>
+          <dl>
+            <div><dt><span class="glyphs" lang="egy" aria-hidden="true">&#x1308B;&#x1309D;&#x131F3;&#x133E4;&#x1305B;</span> Ra <span class="translit" lang="egy-Latn">r&#xA725;</span></dt><dd>Soarele, și zeul care este soarele.</dd></div>
+            <div><dt><span class="glyphs" lang="egy" aria-hidden="true">&#x1327B;&#x132AA;&#x132AA;&#x13199;</span> Apep <span class="translit" lang="egy-Latn">&#xA725;&#xA723;pp</span></dt><dd>Șarpele haosului. Apophis, la greci.</dd></div>
+            <div><dt><span class="glyphs" lang="egy" aria-hidden="true">&#x131FD;</span> Duat <span class="translit" lang="egy-Latn">dw&#xA723;t</span></dt><dd>Țara de sub lume. Un singur semn: o stea într-un cerc.</dd></div>
+            <div><dt><span class="glyphs" lang="egy" aria-hidden="true">&#x13337;&#x1309D;&#x133CF;&#x13066;</span> Maat <span class="translit" lang="egy-Latn">m&#xA723;&#xA725;t</span></dt><dd>Adevăr, echilibru, rânduiala dreaptă; și o zeiță, care poartă o pană.</dd></div>
+            <div><dt><span class="glyphs" lang="egy" aria-hidden="true">&#x131CB;&#x13283;&#x13191;&#x133CF;&#x1316A;</span> Isfet <span class="translit" lang="egy-Latn">jzft</span></dt><dd>Dezordine și strâmbătate. Se încheie cu vrabia, semnul pe care scribii îl puneau pe lucrurile rele.</dd></div>
+            <div><dt><span class="glyphs" lang="egy" aria-hidden="true">&#x131A3;&#x1308B;&#x131CB;&#x1305B;</span> Khepri <span class="translit" lang="egy-Latn">&#x1E2B;prj</span></dt><dd>Scarabeul; soarele la răsărit. Numele lui înseamnă „cel care ia ființă”.</dd></div>
+            <div><dt><span class="glyphs" lang="egy" aria-hidden="true">&#x13394;&#x13216;&#x13197;</span> Mehen <span class="translit" lang="egy-Latn">m&#x1E25;n</span></dt><dd>„Cel încolăcit”, șarpele care păzește cabina.</dd></div>
+            <div><dt><span class="glyphs" lang="egy" aria-hidden="true">&#x132F4;&#x133CF;&#x13219;&#x130E9;</span> Seth <span class="translit" lang="egy-Latn">st&#x161;</span></dt><dd>Furtună, deșert, violență; sulițașul de la proră.</dd></div>
+          </dl>
+          <p class="note">Aici semnele sunt așezate în rând. Un scrib le-ar fi grupat în pătrate ordonate.</p>
+        </section>
+
+        <section class="sources" aria-labelledby="sources-h">
+          <h3 id="sources-h">De unde știm</h3>
+          <ul>
+            <li><cite>Amduat</cite>, „Ceea ce se află în Duat”: cele douăsprezece ceasuri, Carnea cu cap de berbec, unirea din ceasul al șaselea, bancul de nisip din ceasul al șaptelea, șarpele din al doisprezecelea. Prima versiune completă se află în mormântul lui Tutmes al III-lea, în jurul anului 1425 î.Hr.</li>
+            <li><cite>Cartea Porților</cite>: porțile și paznicii lor, Mehen în jurul cabinei.</li>
+            <li><cite>Cartea Morților</cite>, capitolul 17: Marele Motan și arborele ished.</li>
+            <li>Papirusul Bremner-Rhind (British Museum EA 10188): <cite>Cartea doborârii lui Apep</cite>.</li>
+            <li lang="en">Erik Hornung, <cite>The Ancient Egyptian Books of the Afterlife</cite> (1999); R. O. Faulkner, “The Bremner-Rhind Papyrus III”, <cite>Journal of Egyptian Archaeology</cite> 23 (1937); Geraldine Pinch, <cite>Egyptian Mythology</cite> (2002); Richard H. Wilkinson, <cite>The Complete Gods and Goddesses of Ancient Egypt</cite> (2003).</li>
+          </ul>
+
+          <h3>Despre imagini</h3>
+          <p>Toate ilustrațiile de pe această pagină au fost generate cu inteligență artificială, anume pentru acest proiect: scenele pictate de Gemini, modelul Google, prin Antigravity, iar figurile decupate de modelul de imagine al OpenAI, prin Codex. Sunt interpretări, nu artefacte. Niciuna nu conține scris, pentru că hieroglifele generate sunt mâzgăleli fără sens. Hieroglifele de mai sus sunt adevărate, culese ca text.</p>
+        </section>
+      </div>
+
+      <p class="restart"><button type="button" class="restart__btn">Ia noaptea de la capăt</button></p>
+    </section>
+  </main>
+</body>
+</html>

@@ -1,0 +1,280 @@
+<!doctype html>
+<html lang="en" data-theme="dark" data-phase="dusk">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Ra &amp; Apep — the sun's war with the serpent</title>
+  <meta name="description" content="Every night the Egyptian sun god sailed through the underworld and fought the chaos serpent Apep. The whole myth, told as one night from sunset to sunrise.">
+  <meta name="theme-color" content="#070b1a">
+  <link rel="alternate" hreflang="en" href="index.html">
+  <link rel="alternate" hreflang="ro" href="ro/index.html">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gentium+Book+Plus:ital,wght@0,400;0,700;1,400&family=Hepta+Slab:wght@1..900&display=swap">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+Egyptian+Hieroglyphs&display=swap&text=%F0%93%81%9B%F0%93%81%A6%F0%93%82%8B%F0%93%82%9D%F0%93%83%A9%F0%93%85%AA%F0%93%86%91%F0%93%86%97%F0%93%86%99%F0%93%86%A3%F0%93%87%8B%F0%93%87%B3%F0%93%87%BD%F0%93%88%96%F0%93%88%99%F0%93%89%BB%F0%93%8A%83%F0%93%8A%AA%F0%93%8B%B4%F0%93%8C%B7%F0%93%8E%94%F0%93%8F%8F%F0%93%8F%A4">
+
+  <link rel="preload" as="image" href="assets/img/sky-dusk-2048.webp" imagesrcset="assets/img/sky-dusk-1376.webp 1376w, assets/img/sky-dusk-2048.webp 2048w" imagesizes="100vw">
+  <link rel="stylesheet" href="tokens.css">
+  <link rel="stylesheet" href="styles.css">
+  <script>
+    // Before first paint: the cinematic layer is on only with JavaScript and with motion allowed.
+    (function (root) {
+      var saved = null;
+      try { saved = localStorage.getItem('motion'); } catch (e) {}
+      var off = saved ? saved === 'off' : matchMedia('(prefers-reduced-motion: reduce)').matches;
+      root.classList.add('js');
+      root.classList.toggle('fx', !off);
+    })(document.documentElement);
+  </script>
+  <script src="main.js" defer></script>
+</head>
+<body>
+  <a class="skip" href="#traveller">Skip to the story</a>
+
+  <div class="ceiling" aria-hidden="true"></div>
+
+  <header class="chrome">
+    <a class="wordmark" href="#dusk">Ra &amp; Apep</a>
+    <div class="chrome__tools">
+      <a class="lang" href="ro/index.html" hreflang="ro" lang="ro" aria-label="Română">RO</a>
+      <button class="motion" type="button" aria-pressed="true" hidden>Motion on</button>
+    </div>
+  </header>
+
+  <nav class="rail" aria-label="Hours of the night">
+    <ol>
+      <li><a href="#duat" aria-label="Hour one: the Duat">I</a></li>
+      <li aria-hidden="true"></li>
+      <li aria-hidden="true"></li>
+      <li aria-hidden="true"></li>
+      <li aria-hidden="true"></li>
+      <li><a href="#midnight" aria-label="Hour six: midnight">VI</a></li>
+      <li><a href="#seventh-hour" aria-label="Hour seven: the battle">VII</a></li>
+      <li aria-hidden="true"></li>
+      <li><a href="#ritual" aria-label="Hour nine: meanwhile, on earth">IX</a></li>
+      <li aria-hidden="true"></li>
+      <li aria-hidden="true"></li>
+      <li><a href="#dawn" aria-label="Hour twelve: dawn">XII</a></li>
+    </ol>
+    <span class="rail__sun" aria-hidden="true"></span>
+  </nav>
+
+  <main>
+    <!-- ============ DUSK ============ -->
+    <section id="dusk" class="scene scene--pin dusk" data-scene="pin" data-hours="0-0" data-phase="dusk" style="--track: 300">
+      <div class="stage">
+        <img class="layer dusk__sky" src="assets/img/sky-dusk-1376.webp" srcset="assets/img/sky-dusk-1376.webp 1376w, assets/img/sky-dusk-2048.webp 2048w" sizes="100vw" width="1376" height="764" alt="" fetchpriority="high" decoding="async">
+        <div class="layer dusk__night"></div>
+        <div class="layer dusk__stars"></div>
+        <div class="dusk__sunbox"><div class="dusk__sun"></div></div>
+        <img class="dusk__horizon" src="assets/img/horizon.webp" width="1536" height="487" alt="" decoding="async">
+        <div class="dusk__glow"></div>
+        <img class="dusk__boat" src="assets/img/barque.webp" width="1503" height="596" alt="" decoding="async">
+        <img class="dusk__reeds" src="assets/img/reeds.webp" width="1024" height="620" alt="" decoding="async">
+        <div class="layer dusk__seam"></div>
+
+        <div class="dusk__title">
+          <h1>Ra <span class="amp">&amp;</span> Apep</h1>
+          <p class="dusk__premise">The sun does not simply rise. Every night, it has to win.</p>
+        </div>
+        <p class="dusk__second">At the western horizon, the sun goes under.</p>
+        <p class="cue"><span>Scroll to follow the sun down</span>
+          <svg viewBox="0 0 12 28" width="12" height="28" aria-hidden="true"><path d="M6 0v26M1 21l5 5 5-5" fill="none" stroke="currentColor" stroke-width="1"/></svg>
+        </p>
+        <p class="sr-only">Illustration: a golden boat sails past the cliffs of western Thebes while an enormous sun sets behind them and the first stars come out.</p>
+      </div>
+    </section>
+
+    <!-- ============ THE TRAVELLER ============ -->
+    <section id="traveller" class="passage passage--figure scene--through" data-scene="through" data-hours="0-0" data-phase="night">
+      <div class="passage__text">
+        <h2 data-reveal>The sun is a traveller</h2>
+        <p>To the Egyptians the sun was not an object. It was a god on a journey, and the journey had a shape. Each morning he was born on the eastern horizon as Khepri, the scarab beetle who rolls the new sun into the sky. At noon he ruled from the height of heaven as Ra, falcon-headed, crowned with the solar disc. By evening he was Atum: an old man bent over a staff, sinking toward the mountains of the west.</p>
+        <p>He made the crossing by boat, because Egypt was a country with one road and that road was a river. The day boat was the <i lang="egy-Latn">Mandjet</i>, the Boat of Millions of Years. At the horizon he left it for a second vessel, the <i lang="egy-Latn">Mesektet</i>, the night boat.</p>
+        <p>A second boat, because the journey did not end at sunset. It went on beneath the world, from west back to east, through a country no living person had seen. Everything that mattered about the sun happened there, in the dark, while Egypt slept.</p>
+        <p class="term"><span class="glyphs" lang="egy" aria-hidden="true">&#x1308B;&#x1309D;&#x131F3;&#x133E4;&#x1305B;</span>
+          <span class="term__body"><b>Ra</b> <span class="translit" lang="egy-Latn">r&#xA725;</span> The word is simply the Egyptian for “sun”. The last sign is the god himself: a seated figure with a falcon's head, wearing the disc.</span></p>
+      </div>
+      <div class="passage__figure" aria-hidden="true">
+        <div class="ra__disc"></div>
+        <img class="ra__img" src="assets/img/ra.webp" width="1022" height="1453" alt="" loading="lazy" decoding="async">
+      </div>
+    </section>
+
+    <!-- ============ THE DUAT ============ -->
+    <figure class="plate scene--through" data-scene="through">
+      <img class="plate__img" src="assets/img/duat-1376.webp" srcset="assets/img/duat-1376.webp 1376w, assets/img/duat-2048.webp 2048w" sizes="100vw" width="1376" height="581" loading="lazy" decoding="async"
+           alt="Seen from the deck of a boat on a black underground river: a colossal stone gate, a burning cobra on top of each of its towers, and more gates receding into the haze beyond it.">
+    </figure>
+
+    <section id="duat" class="passage passage--over" data-hours="1-5" data-phase="night">
+      <div class="passage__text">
+        <h2 data-reveal>The Duat</h2>
+        <p>The Egyptians called the country under the world the Duat. It was not a hell. It was a geography: a long river valley with banks and fields and caverns, populated by gods, by the blessed dead, and by things that had no names in the daylight.</p>
+        <p>The night was divided into twelve hours, and every hour was a region with a gate. Each gate had its guardians, and the guardians had to be addressed by name before they would let the boat through. In the royal tombs of the Valley of the Kings the whole voyage is painted along the walls, hour by hour, in books the Egyptians called <cite>What Is in the Duat</cite> and the <cite>Book of Gates</cite>. They are maps. A dead king meant to make the trip himself, as one of the sun's crew.</p>
+        <p>Ra changes as he enters. In the tombs the night sun is drawn with the head of a ram and labelled with a single word: <i>Flesh</i>. He is a body now, without his light, and he must be carried. A great serpent named Mehen loops his coils around the cabin to guard it. Not every serpent down here is an enemy.</p>
+        <p>As the boat passes, the dead on the banks wake. For the length of one hour they have light, and air, and the voice of their god. When the boat moves on they lie back down, and the texts say you can hear them wailing in the dark behind it.</p>
+      </div>
+    </section>
+
+    <!-- ============ MIDNIGHT ============ -->
+    <section id="midnight" class="midnight" data-hours="6-6" data-phase="night">
+      <div class="midnight__inner">
+        <h2 data-reveal>The sixth hour</h2>
+        <p>At midnight the boat reaches the deepest place there is. Here, at the bottom of the night, lies a corpse: the body of Osiris, lord of the dead. It is also, the texts insist, the body of the sun.</p>
+        <p>Ra and Osiris meet and become, for a moment, one god. The dead body receives a soul; the exhausted soul receives a body. This is the secret the whole voyage exists to reach: the old sun, renewed in the dark, like a seed.</p>
+        <p>It is also the moment of greatest danger. Something in the Duat has been waiting for exactly this.</p>
+      </div>
+    </section>
+
+    <!-- ============ APEP ============ -->
+    <div class="apep scene--through" data-scene="through">
+      <figure class="plate plate--apep">
+        <img class="plate__img" src="assets/img/apep-1376.webp" srcset="assets/img/apep-1376.webp 1376w, assets/img/apep-2048.webp 2048w" sizes="100vw" width="1376" height="582" loading="lazy" decoding="async"
+             alt="A serpent the size of a landscape rises out of black water, its coils arching away into the dark, one red eye burning. A tiny golden boat glimmers far below it.">
+      </figure>
+      <img class="apep__head" src="assets/img/apep-head.webp" width="1501" height="864" alt="" aria-hidden="true" loading="lazy" decoding="async">
+    </div>
+
+    <section id="apep" class="passage passage--left" data-hours="6.5-7" data-phase="night">
+      <div class="passage__text">
+        <h2 data-reveal>Apep</h2>
+        <p>His name was Apep; the Greeks wrote it Apophis. The tomb texts also call him Terrible of Face. He was a serpent, and they strain to say how large: the sandbank he lies on in the Duat is four hundred and fifty cubits long, well over two hundred metres, and his coils fill all of it. He had no temples and no priests. In all of Egyptian history nobody left him an offering. He was not the god of anything. He was the enemy of everything.</p>
+        <p>The Egyptians had a word for what he was: <i lang="egy-Latn">isfet</i>. Disorder, falsehood, the unravelling of things. Its opposite was <i lang="egy-Latn">ma'at</i> — truth, balance, the world as it ought to be — and ma'at was what Ra's voyage kept in motion. Apep wanted one thing only: to stop the boat. If the boat stopped, the sun would not rise. If the sun did not rise there would be no more days, and no world to have them in.</p>
+        <p>He had weapons. His roar rolled through the underworld like thunder. His stare could hold the entire crew motionless, gods and all, gazing back at him while the boat drifted. And in the seventh hour of the night he did the simplest, most terrible thing available to him. He opened his mouth and drank the river. The boat of the sun ran aground on a sandbank, in the dark, with the serpent's coils rising around it.</p>
+        <p class="term"><span class="glyphs" lang="egy" aria-hidden="true">&#x1327B;&#x132AA;&#x132AA;&#x13199;</span>
+          <span class="term__body"><b>Apep</b> <span class="translit" lang="egy-Latn">&#xA725;&#xA723;pp</span> His name first appears around 2100 BCE, when the pyramids were already centuries old. Scribes often drew the final serpent with knives already stuck in it, so that even the written word could do no harm.</span></p>
+      </div>
+    </section>
+
+    <!-- ============ THE SEVENTH HOUR ============ -->
+    <section id="seventh-hour" class="scene scene--pin battle" data-scene="pin" data-hours="7-7" data-phase="night" style="--track: 620">
+      <div class="stage">
+        <img class="layer battle__plate" src="assets/img/battle-1376.webp" srcset="assets/img/battle-1376.webp 1376w, assets/img/battle-2048.webp 2048w" sizes="100vw" width="1376" height="582" loading="lazy" decoding="async"
+             alt="On the prow of a golden boat the god Set, a man with the long curved snout and tall squared ears of the Set animal, drives a spear into the open mouth of the giant serpent. Sparks and embers burst from the wound.">
+        <div class="layer battle__flash" aria-hidden="true"></div>
+        <div class="layer battle__scrim" aria-hidden="true"></div>
+
+        <div class="battle__text">
+          <h2>The seventh hour</h2>
+          <ol class="beats" style="--n: 7">
+            <li class="beat beat--first" style="--i: 0">
+              <p class="beat__lede">This is where the night is decided. The sun god does not fight alone, and his best fighter is the last god anyone would trust.</p>
+            </li>
+            <li class="beat" style="--i: 1">
+              <h3>Set</h3>
+              <p>At the prow stands Set: god of storms and deserts, murderer of Osiris, a byword for violence. He is also the one member of the crew whose nerve the serpent's stare cannot break. Every night he plants his feet and drives a spear into Apep's body. It is the best thing he ever does.</p>
+            </li>
+            <li class="beat" style="--i: 2">
+              <h3>Isis</h3>
+              <p>Behind him, Isis speaks. Hers are words of power, and they work. The serpent's strength drains out of him, and the grounded boat begins to move across the dry riverbed, towed by magic alone.</p>
+            </li>
+            <li class="beat" style="--i: 3">
+              <h3>Serqet</h3>
+              <p>Serqet, the scorpion goddess, throws fetters over the serpent's head and draws them tight. Others come with knives. In the tombs Apep is painted already carved apart, a blade standing in every coil: a picture designed to make itself true.</p>
+            </li>
+            <li class="beat" style="--i: 4">
+              <h3>Mehen</h3>
+              <p>Around the cabin Mehen tightens his own coils. A serpent set against a serpent: a wall of living scales between the enemy and the helpless Flesh.</p>
+            </li>
+            <li class="beat" style="--i: 5">
+              <h3>The Great Cat</h3>
+              <p>And in the spell books of the dead, Ra fights for himself. He takes the shape of a great tomcat beneath the sacred <i lang="egy-Latn">ished</i> tree of Heliopolis, pins the serpent under one paw, and takes off its head with a knife.</p>
+            </li>
+            <li class="beat beat--last" style="--i: 6">
+              <p class="beat__lede">They win. They always win. And it is never enough, because Apep cannot die. Chaos is not the kind of thing that dies. By tomorrow night he is whole again, and waiting in the seventh hour.</p>
+            </li>
+          </ol>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ ON EARTH ============ -->
+    <section id="ritual" class="ritual" data-scene="through" data-hours="8-11" data-phase="night">
+      <figure class="plate plate--ritual">
+        <img class="plate__img" src="assets/img/ritual-1376.webp" srcset="assets/img/ritual-1376.webp 1376w, assets/img/ritual-2048.webp 2048w" sizes="(min-width: 64rem) 50vw, 100vw" width="1376" height="582" loading="lazy" decoding="async"
+             alt="Night in a temple hall of enormous columns. Three shaven-headed priests, one in a leopard skin, stand over a brazier in which a small red wax serpent is burning.">
+      </figure>
+      <div class="passage__text">
+        <h2 data-reveal>Meanwhile, on earth</h2>
+        <p>The Egyptians did not leave this fight to the gods. If the sun's survival was an open question every night, then it was everybody's business.</p>
+        <p>A papyrus now in the British Museum preserves a temple service called <cite>The Book of Overthrowing Apep</cite>. According to the papyrus it was performed every day in the temple of Amun-Ra at Karnak, and its instructions are blunt. Make a serpent out of wax. Write his name on it in green ink. Then do to the wax what the gods are doing in the Duat. The chapters of the book are its own list of orders:</p>
+        <ol class="acts">
+          <li class="act">Spitting upon Apep</li>
+          <li class="act">Defiling Apep with the left foot</li>
+          <li class="act">Taking a lance to smite Apep</li>
+          <li class="act">Fettering Apep</li>
+          <li class="act">Taking a knife to smite Apep</li>
+          <li class="act">Putting fire upon Apep</li>
+        </ol>
+        <p>The danger sometimes showed itself. A storm that blacked out the sky at noon, the ground shaking, a sudden darkness in the middle of the day: these were the hours when Apep was winning. Then the rite was performed with everything the temple had, and sooner or later the light came back. It always did. That was the proof that it worked.</p>
+      </div>
+    </section>
+
+    <!-- ============ THE TWELFTH HOUR ============ -->
+    <section id="dawn" class="passage passage--centre" data-hours="11-12" data-phase="night">
+      <div class="passage__text">
+        <h2 data-reveal>The twelfth hour</h2>
+        <p>In the last hour of the night the boat comes to one more serpent: an ally, vast, whose name means Life of the Gods. The crew take up the tow rope and haul the boat inside him, entering at the tail. The texts say that the sun and everyone with him go in old and grey, and come out of the mouth as newborn children.</p>
+        <p>Then the eastern gate stands open. Khepri, the scarab, puts his shoulder to the young sun and rolls it over the rim of the world. Shu, the air, lifts it clear. In the fields by the river somebody looks up and sees an ordinary morning.</p>
+      </div>
+    </section>
+
+    <section class="scene scene--pin dawn" data-scene="pin" data-rest="1" data-hours="12-12" data-phase="dawn" style="--track: 300">
+      <div class="stage">
+        <img class="layer dawn__sky" src="assets/img/sky-dawn-1376.webp" srcset="assets/img/sky-dawn-1376.webp 1376w, assets/img/sky-dawn-2048.webp 2048w" sizes="100vw" width="1376" height="764" alt="" loading="lazy" decoding="async">
+        <div class="layer dawn__night"></div>
+        <div class="dawn__sun"></div>
+        <img class="dawn__khepri" src="assets/img/khepri.webp" width="1105" height="956" alt="" loading="lazy" decoding="async">
+        <img class="dawn__horizon" src="assets/img/horizon.webp" width="1536" height="487" alt="" loading="lazy" decoding="async">
+        <div class="layer dawn__seam"></div>
+        <p class="dawn__line">It was never ordinary. <span>It was won.</span></p>
+        <p class="sr-only">Illustration: the sun rises over the eastern cliffs, lifted by Khepri, a winged scarab of gold and lapis, and the night sky turns to day.</p>
+      </div>
+    </section>
+
+    <!-- ============ AFTER ============ -->
+    <section id="after" class="after" data-theme="light" data-hours="12-12" data-phase="day">
+      <div class="passage__text">
+        <h2 data-reveal>What the story is saying</h2>
+        <p>Most mythologies put their great battle at the beginning of time, or at the end of it. Egypt put it in the middle of every night. Creation was not a finished act. The world was a small lit place with chaos on every side, and order was not the natural state of things. It had to be made again each day, by gods and by people, against an enemy that could be beaten but never killed.</p>
+        <p>That is a harder idea than it looks, and a more modern one. Nothing good is permanent. Everything worth having is maintained. The sun came up this morning, and somewhere below the horizon the serpent is already whole again.</p>
+      </div>
+
+      <div class="after__grid">
+        <section class="glossary" aria-labelledby="glossary-h">
+          <h3 id="glossary-h">The words</h3>
+          <dl>
+            <div><dt><span class="glyphs" lang="egy" aria-hidden="true">&#x1308B;&#x1309D;&#x131F3;&#x133E4;&#x1305B;</span> Ra <span class="translit" lang="egy-Latn">r&#xA725;</span></dt><dd>The sun, and the god who is the sun.</dd></div>
+            <div><dt><span class="glyphs" lang="egy" aria-hidden="true">&#x1327B;&#x132AA;&#x132AA;&#x13199;</span> Apep <span class="translit" lang="egy-Latn">&#xA725;&#xA723;pp</span></dt><dd>The serpent of chaos. Apophis in Greek.</dd></div>
+            <div><dt><span class="glyphs" lang="egy" aria-hidden="true">&#x131FD;</span> Duat <span class="translit" lang="egy-Latn">dw&#xA723;t</span></dt><dd>The country under the world. One sign: a star in a circle.</dd></div>
+            <div><dt><span class="glyphs" lang="egy" aria-hidden="true">&#x13337;&#x1309D;&#x133CF;&#x13066;</span> Ma'at <span class="translit" lang="egy-Latn">m&#xA723;&#xA725;t</span></dt><dd>Truth, balance, right order; also a goddess, who wears a feather.</dd></div>
+            <div><dt><span class="glyphs" lang="egy" aria-hidden="true">&#x131CB;&#x13283;&#x13191;&#x133CF;&#x1316A;</span> Isfet <span class="translit" lang="egy-Latn">jzft</span></dt><dd>Disorder and wrong. It ends with the sparrow, the sign scribes put on bad things.</dd></div>
+            <div><dt><span class="glyphs" lang="egy" aria-hidden="true">&#x131A3;&#x1308B;&#x131CB;&#x1305B;</span> Khepri <span class="translit" lang="egy-Latn">&#x1E2B;prj</span></dt><dd>The scarab; the sun at dawn. His name means “he who comes into being”.</dd></div>
+            <div><dt><span class="glyphs" lang="egy" aria-hidden="true">&#x13394;&#x13216;&#x13197;</span> Mehen <span class="translit" lang="egy-Latn">m&#x1E25;n</span></dt><dd>“The coiled one”, the serpent who guards the cabin.</dd></div>
+            <div><dt><span class="glyphs" lang="egy" aria-hidden="true">&#x132F4;&#x133CF;&#x13219;&#x130E9;</span> Set <span class="translit" lang="egy-Latn">st&#x161;</span></dt><dd>Storm, desert, violence; the spearman at the prow.</dd></div>
+          </dl>
+          <p class="note">Signs are set in a line here. A scribe would have stacked them into neat squares.</p>
+        </section>
+
+        <section class="sources" aria-labelledby="sources-h">
+          <h3 id="sources-h">Where this comes from</h3>
+          <ul>
+            <li>The <cite>Amduat</cite>, “What Is in the Duat”: the twelve hours, the ram-headed Flesh, the sixth-hour union, the sandbank of the seventh hour, the serpent of the twelfth. First complete in the tomb of Thutmose III, about 1425 BCE.</li>
+            <li>The <cite>Book of Gates</cite>: the gates and their guardians, Mehen around the cabin.</li>
+            <li>The <cite>Book of the Dead</cite>, spell 17: the Great Cat and the ished tree.</li>
+            <li>Papyrus Bremner-Rhind (British Museum EA 10188): <cite>The Book of Overthrowing Apep</cite>.</li>
+            <li>Erik Hornung, <cite>The Ancient Egyptian Books of the Afterlife</cite> (1999); R. O. Faulkner, “The Bremner-Rhind Papyrus III”, <cite>Journal of Egyptian Archaeology</cite> 23 (1937); Geraldine Pinch, <cite>Egyptian Mythology</cite> (2002); Richard H. Wilkinson, <cite>The Complete Gods and Goddesses of Ancient Egypt</cite> (2003).</li>
+          </ul>
+
+          <h3>About the pictures</h3>
+          <p>Every illustration on this page was generated by AI for this project: the painted scenes by Google's Gemini, working through Antigravity, and the cut-out figures by OpenAI's image model, working through Codex. They are interpretations, not artefacts. None of them contains writing, because generated hieroglyphs are gibberish. The hieroglyphs above are real ones, set as text.</p>
+        </section>
+      </div>
+
+      <p class="restart"><button type="button" class="restart__btn">Begin the night again</button></p>
+    </section>
+  </main>
+</body>
+</html>

@@ -1,0 +1,859 @@
+/* Ra & Apep
+   Two layers. The base is a complete illustrated article: nothing is pinned, nothing is hidden.
+   html.fx (JavaScript running and motion allowed) turns on the film: pinned stages and layers
+   driven by --p, a 0 to 1 scroll progress that main.js writes on every [data-scene].
+   Without .fx each scene rests at the --p declared on it here. */
+
+:root {
+  /* Five-armed stars, as on the astronomical ceilings of New Kingdom tombs. */
+  --stars: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120' fill='none' stroke='%23e0b95b' stroke-opacity='.36' stroke-width='1.1' stroke-linecap='round'%3E%3Cpath d='M30 30V21M30 30l8.56-2.78M30 30l5.29 7.28M30 30l-5.29 7.28M30 30l-8.56-2.78M90 90v-9M90 90l8.56-2.78M90 90l5.29 7.28M90 90l-5.29 7.28M90 90l-8.56-2.78'/%3E%3C/svg%3E");
+  --chrome-ink: var(--sand-100);
+  --night-scrim: oklch(0.08 0.03 268);
+}
+
+/* ---------- Base ---------- */
+*, *::before, *::after { box-sizing: border-box; }
+
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  scrollbar-color: var(--gold-800) var(--lapis-950);
+  scrollbar-width: thin;
+  scroll-padding-top: var(--space-10);
+}
+html.fx { scroll-behavior: smooth; }
+/* data-phase is the chapter's (dusk, night, dawn, day). During the sunrise the top of the sky stays
+   deep blue while the lower sky turns pale, so data-ink="dark" flips the rail first; the wordmark
+   and motion switch follow only in full daylight. */
+html[data-ink="dark"] { --rail-ink: var(--ink-900); }
+html[data-phase="day"] { --chrome-ink: var(--ink-900); scrollbar-color: var(--lapis-600) var(--limestone-100); }
+
+body {
+  margin: 0;
+  background: var(--color-bg-primary);
+  color: var(--color-text-primary);
+  font-family: var(--font-family-body);
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-relaxed);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  overflow-x: clip;
+  caret-color: var(--gold-400);
+}
+
+::selection { background: var(--gold-400); color: var(--lapis-950); }
+[data-theme="light"] ::selection { background: var(--lapis-600); color: var(--limestone-50); }
+
+:focus-visible {
+  outline: 2px solid var(--color-border-focus);
+  outline-offset: 4px;
+  border-radius: var(--border-radius-sm);
+}
+
+img { display: block; max-width: 100%; height: auto; }
+
+h1, h2, h3 {
+  margin: 0;
+  font-family: var(--font-family-display);
+  font-weight: var(--font-weight-light);
+  line-height: var(--line-height-tight);
+  text-wrap: balance;
+  overflow-wrap: break-word; /* long words in other languages must never overflow a phone */
+}
+h2 {
+  font-size: var(--font-size-2xl);
+  text-transform: uppercase;
+  letter-spacing: var(--letter-spacing-title);
+  color: var(--color-accent-primary);
+}
+h2::after {
+  content: "";
+  display: block;
+  width: var(--space-10);
+  height: 1px;
+  margin-top: var(--space-7);
+  background: currentColor;
+}
+h3 {
+  font-size: var(--font-size-lg);
+  text-transform: uppercase;
+  letter-spacing: var(--letter-spacing-title);
+}
+p { margin: 0; text-wrap: pretty; }
+i, cite { font-style: italic; }
+
+a {
+  color: var(--color-text-link);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.22em;
+  transition: color var(--duration-fast) var(--easing-default);
+}
+a:hover { color: var(--color-accent-primary-hover); }
+
+.sr-only {
+  position: absolute;
+  width: 1px; height: 1px;
+  margin: -1px; padding: 0; border: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.skip {
+  position: fixed;
+  z-index: 50;
+  top: var(--space-5); left: var(--space-5);
+  padding: var(--space-5) var(--space-7);
+  background: var(--gold-400);
+  color: var(--lapis-950);
+  font-family: var(--font-family-display);
+  text-decoration: none;
+  transform: translateY(-200%);
+}
+.skip:focus { transform: none; }
+
+/* ---------- The star ceiling ---------- */
+.ceiling {
+  position: fixed;
+  z-index: -1;
+  inset: -14vh 0;
+  pointer-events: none;
+  background-image: var(--stars), radial-gradient(120% 70% at 50% 0%, var(--lapis-800), transparent 72%);
+  background-size: 7.5rem 7.5rem, 100% 100%;
+}
+.fx .ceiling { transform: translate3d(0, calc(var(--scrolled, 0) * -12vh), 0); }
+
+/* ---------- Chrome: wordmark and motion switch ---------- */
+.chrome {
+  position: fixed;
+  z-index: 30;
+  inset: 0 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--space-4) var(--gutter);
+  padding-top: max(var(--space-4), env(safe-area-inset-top));
+  color: var(--chrome-ink);
+  pointer-events: none;
+  transition: color var(--duration-slower) var(--easing-default);
+}
+.chrome > * { pointer-events: auto; }
+/* Text scrolling under the fixed chrome fades out instead of colliding with it. */
+.chrome::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 -2.5rem;
+  z-index: -1;
+  background: linear-gradient(to bottom, color-mix(in oklch, var(--night-scrim) 96%, transparent) 45%, transparent);
+  opacity: 0;
+  transition: opacity var(--duration-slower) var(--easing-default);
+}
+/* Only over reading ground. The pinned dusk and dawn scenes have no text under the chrome. */
+html[data-sun="down"]:is([data-phase="night"], [data-phase="day"]) .chrome::before { opacity: 1; }
+html[data-phase="day"] .chrome::before { background: linear-gradient(to bottom, var(--limestone-50) 45%, transparent); }
+
+.chrome__tools { display: flex; align-items: center; gap: var(--space-3); }
+
+.wordmark, .motion, .lang, .rail a {
+  font-family: var(--font-family-display);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+  letter-spacing: var(--letter-spacing-wide);
+  text-transform: uppercase;
+  color: inherit;
+  text-decoration: none;
+}
+html:not([data-phase="day"]) :is(.wordmark, .motion, .lang), html:not([data-ink="dark"]) .rail a { text-shadow: 0 1px 10px oklch(0.05 0.02 268 / 0.85); }
+
+/* Language switch: always available, from the first viewport on. */
+.lang {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 2.75rem;
+  min-height: 2.75rem;
+  border-radius: var(--border-radius-full);
+  transition: color var(--duration-fast) var(--easing-default), background-color var(--duration-fast) var(--easing-default);
+}
+.lang:hover { color: var(--gold-200); background: color-mix(in oklch, currentColor 12%, transparent); }
+.lang:active { background: color-mix(in oklch, currentColor 22%, transparent); }
+html[data-phase="day"] .lang:hover { color: var(--lapis-600); }
+
+.wordmark {
+  display: inline-flex; align-items: center; min-height: 2.75rem;
+  transition: opacity var(--duration-slower) var(--easing-default), visibility 0s, color var(--duration-fast) var(--easing-default);
+}
+/* The title is on screen until the sun is down; the wordmark would only repeat it. */
+html.js:not([data-sun="down"]) .wordmark { opacity: 0; visibility: hidden; transition-delay: 0s, var(--duration-slower), 0s; }
+.wordmark:hover { color: var(--gold-200); }
+html[data-phase="day"] .wordmark:hover { color: var(--lapis-600); }
+
+.motion {
+  min-height: 2.75rem;
+  padding: 0 var(--space-6);
+  background: none;
+  border: 1px solid color-mix(in oklch, currentColor 45%, transparent);
+  border-radius: var(--border-radius-full);
+  cursor: pointer;
+  transition: background-color var(--duration-fast) var(--easing-default), border-color var(--duration-fast) var(--easing-default);
+}
+.motion:hover { background: color-mix(in oklch, currentColor 14%, transparent); border-color: currentColor; }
+.motion:active { background: color-mix(in oklch, currentColor 24%, transparent); }
+.motion[aria-pressed="false"] { border-style: dashed; }
+
+/* ---------- The hour rail (small screens first: a bar along the bottom) ---------- */
+.rail {
+  position: fixed;
+  z-index: 30;
+  left: 0; right: 0; bottom: 0;
+  height: calc(3.25rem + env(safe-area-inset-bottom));
+  padding: 0 var(--gutter) env(safe-area-inset-bottom);
+  color: var(--rail-ink, var(--chrome-ink));
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity var(--duration-slower) var(--easing-default), visibility 0s var(--duration-slower), color var(--duration-slower) var(--easing-default);
+}
+.rail::before {
+  content: "";
+  position: absolute;
+  inset: -1.5rem 0 0;
+  z-index: -1;
+  background: linear-gradient(to top, var(--night-scrim), transparent);
+  opacity: 0.85;
+  transition: opacity var(--duration-slower) var(--easing-default);
+}
+html[data-phase="day"] .rail::before { background: linear-gradient(to top, var(--limestone-50), transparent); }
+html[data-phase="dawn"] .rail::before { opacity: 0; }
+html[data-sun="down"] .rail, html:not(.js) .rail { opacity: 1; visibility: visible; transition-delay: 0s; }
+
+.rail ol {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  height: 3.25rem;
+  margin: 0; padding: 0;
+  list-style: none;
+}
+.rail li { position: relative; width: 1px; height: 0.5rem; }
+.rail li[aria-hidden]::after { content: ""; position: absolute; inset: 0; background: currentColor; opacity: 0.4; }
+.rail a {
+  position: absolute;
+  left: 50%; bottom: 0;
+  translate: -50% 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: center;
+  gap: var(--space-3);
+  width: 1.75rem;
+  height: 2.75rem;
+  opacity: 0.8;
+  transition: opacity var(--duration-fast) var(--easing-default), color var(--duration-fast) var(--easing-default);
+}
+.rail a::after { content: ""; width: 1px; height: 0.9rem; background: currentColor; }
+.rail a:hover, .rail a:focus-visible { opacity: 1; color: var(--color-accent-primary-hover); }
+html[data-ink="dark"] .rail a:hover { color: var(--lapis-600); }
+
+.rail__sun {
+  position: absolute;
+  left: calc(var(--gutter) + (100% - 2 * var(--gutter)) * clamp(0, (var(--hour, 0) - 1) / 11, 1));
+  top: 1.1rem;
+  width: 0.7rem; height: 0.7rem;
+  translate: -50% 0;
+  border-radius: 50%;
+  background: var(--gold-400);
+  box-shadow: 0 0 0 4px color-mix(in oklch, var(--gold-400) 22%, transparent), 0 0 1.1rem 0.3rem color-mix(in oklch, var(--gold-400) 50%, transparent);
+  pointer-events: none;
+}
+html:not(.js) .rail__sun { display: none; }
+
+@media (min-width: 48rem) {
+  .rail {
+    left: auto; bottom: auto;
+    right: max(var(--space-6), env(safe-area-inset-right));
+    top: 50%;
+    translate: 0 -50%;
+    width: 4rem;
+    height: min(62svh, 32rem);
+    padding: 0;
+  }
+  .rail::before { display: none; }
+  .rail ol { flex-direction: column; align-items: flex-end; height: 100%; }
+  .rail li { width: 0.5rem; height: 1px; }
+  .rail a {
+    left: auto; right: 0; bottom: auto; top: 50%;
+    translate: 0 -50%;
+    flex-direction: row;
+    justify-content: flex-end;
+    gap: var(--space-4);
+    width: 4rem; height: 2.75rem;
+  }
+  .rail a::after { width: 1.1rem; height: 1px; }
+  .rail__sun {
+    left: auto; right: -0.1rem;
+    top: calc(100% * clamp(0, (var(--hour, 0) - 1) / 11, 1));
+    translate: 0 -50%;
+  }
+}
+
+/* ---------- Scenes ---------- */
+.scene { position: relative; }
+.stage { position: relative; min-height: 100svh; overflow: clip; isolation: isolate; }
+.layer { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+img.layer { object-fit: cover; }
+
+/* Rest state without the film layer: a through scene sits as if centred in the viewport.
+   Declared on scene roots only, so children inherit the value main.js writes there. */
+[data-scene="through"] { --p: 0.5; }
+
+.fx .scene--pin { height: calc(var(--track, 300) * 1svh); }
+.fx .scene--pin > .stage { position: sticky; top: 0; height: 100svh; }
+
+/* ---------- Dusk ---------- */
+.dusk { --p: 0; --horizon-w: max(100vw, 62rem); --horizon-h: calc(var(--horizon-w) * 0.317); --lift: 7svh; }
+.dusk .stage { background: var(--lapis-950); }
+
+.dusk__sky {
+  height: 88%;
+  object-position: 50% 100%;
+  transform-origin: 50% 100%;
+  transform: translate3d(0, calc(var(--p) * -4%), 0) scale(1.08);
+}
+.dusk__night { background: var(--lapis-950); opacity: calc(var(--p) * 0.93); }
+.dusk__stars {
+  background-image: var(--stars);
+  background-size: 7.5rem 7.5rem;
+  opacity: clamp(0, calc((var(--p) - 0.4) * 1.7), 0.95);
+  -webkit-mask-image: linear-gradient(to bottom, #000 40%, transparent 72%);
+  mask-image: linear-gradient(to bottom, #000 40%, transparent 72%);
+}
+
+/* The sun may only ever be seen above a line that sits inside the opaque cliffs, so once it has
+   set it cannot shine through the faded water below them. */
+.dusk__sunbox {
+  position: absolute;
+  inset: 0 0 auto;
+  height: calc(100svh - var(--lift) - var(--horizon-h) * 0.45);
+  overflow: clip;
+  pointer-events: none;
+}
+.dusk__sun {
+  --sun: min(max(26vw, 13rem), 38svh);
+  position: absolute;
+  left: 50%; top: 33svh;
+  width: var(--sun);
+  aspect-ratio: 1;
+  translate: -50% 0;
+  border-radius: 50%;
+  background: radial-gradient(circle at 50% 42%, oklch(0.98 0.05 95) 0%, var(--gold-200) 24%, var(--gold-400) 56%, var(--carnelian-400) 100%);
+  box-shadow:
+    0 0 calc(var(--sun) * 0.2) calc(var(--sun) * 0.05) color-mix(in oklch, var(--gold-400) 65%, transparent),
+    0 0 calc(var(--sun) * 0.9) calc(var(--sun) * 0.28) color-mix(in oklch, var(--carnelian-400) 38%, transparent);
+  transform: translate3d(0, calc(var(--p) * 60svh), 0);
+}
+.dusk__sun::after {
+  content: "";
+  position: absolute; inset: 0;
+  border-radius: 50%;
+  background: radial-gradient(circle at 50% 40%, var(--carnelian-400), var(--carnelian-600));
+  opacity: calc(var(--p) * 1.5);
+}
+
+.dusk__horizon, .dawn__horizon {
+  position: absolute;
+  left: 50%; bottom: 0;
+  width: var(--horizon-w);
+  max-width: none;
+  translate: -38% 0;
+}
+.dusk__horizon {
+  bottom: var(--lift); /* leaves a band of dark water below for the scroll cue */
+  -webkit-mask-image: linear-gradient(to bottom, #000 80%, transparent 100%);
+  mask-image: linear-gradient(to bottom, #000 80%, transparent 100%);
+  transform: translate3d(0, calc((1 - var(--p)) * 2%), 0);
+  filter: brightness(calc(1 - var(--p) * 0.6)) saturate(calc(1 - var(--p) * 0.4));
+}
+
+.dusk__boat, .dusk__glow {
+  position: absolute;
+  left: 50%;
+  max-width: none;
+  translate: -64% 0;
+  transform: translate3d(calc(var(--p) * 40vw), 0, 0);
+}
+.dusk__boat {
+  bottom: calc(var(--lift) + var(--horizon-h) * 0.075);
+  width: min(86vw, 40rem);
+  -webkit-mask-image: linear-gradient(to bottom, #000 78%, transparent 96%);
+  mask-image: linear-gradient(to bottom, #000 78%, transparent 96%);
+}
+.dusk__glow {
+  bottom: calc(var(--lift) + var(--horizon-h) * 0.015);
+  width: min(96vw, 46rem);
+  height: calc(var(--horizon-h) * 0.16);
+  background: radial-gradient(ellipse at 50% 35%, color-mix(in oklch, var(--gold-400) 60%, transparent), transparent 68%);
+  mix-blend-mode: screen;
+  opacity: calc(0.3 + var(--p) * 0.55);
+}
+
+.dusk__reeds {
+  position: absolute;
+  left: 50%; bottom: -18svh;
+  width: max(150vw, 34rem); /* narrow screens: tight enough that the side clumps reach into frame */
+  max-width: none;
+  translate: -50% 0;
+  transform-origin: 50% 100%;
+  transform: translate3d(0, calc(var(--p) * 24%), 0) scale(calc(1 + var(--p) * 0.16));
+  filter: blur(1px) brightness(0.45); /* back-lit: a silhouette at sunset and at night alike */
+}
+
+.dusk__seam {
+  background: linear-gradient(to bottom, transparent 74%, var(--lapis-950) 100%);
+  opacity: calc(0.35 + var(--p) * 0.65);
+}
+
+.dusk__title {
+  --t: clamp(0, calc(var(--p) / 0.28), 1);
+  position: absolute;
+  inset: 11svh var(--gutter) auto;
+  text-align: center;
+  opacity: calc(1 - var(--t));
+  transform: translate3d(0, calc(var(--t) * -5svh), 0);
+}
+.dusk__title h1 {
+  font-size: clamp(2.4rem, 10.5vw, 6rem); /* one line at every width; 6rem is the display ceiling */
+  white-space: nowrap;
+  font-weight: 200;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-right: -0.1em; /* optical: cancel the trailing tracking */
+  color: var(--sand-100);
+  text-shadow: 0 2px 2rem oklch(0.08 0.03 268 / 0.55);
+}
+.amp { font-weight: 100; color: var(--gold-400); margin-inline: 0.06em; }
+.dusk__premise {
+  max-width: 40ch; /* two balanced lines in English and in Romanian; a third would run onto the sun */
+  text-wrap: balance;
+  margin: var(--space-6) auto 0;
+  font-size: var(--font-size-md);
+  line-height: 1.4;
+  color: var(--sand-100);
+  text-shadow: 0 1px 1.2rem oklch(0.08 0.03 268 / 0.8);
+}
+.dusk__second {
+  --t: clamp(0, calc((var(--p) - 0.56) / 0.2), 1);
+  position: absolute;
+  inset: 22svh var(--gutter) auto;
+  max-width: 20ch;
+  margin-inline: auto;
+  text-align: center;
+  font-family: var(--font-family-display);
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-light);
+  line-height: 1.2;
+  color: var(--sand-100);
+  opacity: var(--t);
+  transform: translate3d(0, calc((1 - var(--t)) * 2.5svh), 0);
+}
+.cue {
+  position: absolute;
+  left: 50%; bottom: var(--space-7);
+  translate: -50% 0;
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-4);
+  font-family: var(--font-family-display);
+  font-size: var(--font-size-xs);
+  letter-spacing: var(--letter-spacing-wide);
+  text-transform: uppercase;
+  text-align: center;
+  width: max-content; /* one line when it fits; wraps on very narrow screens and in longer languages */
+  max-width: calc(100% - 2 * var(--gutter));
+  color: var(--sand-100);
+  text-shadow: 0 1px 10px oklch(0.05 0.02 268 / 0.9);
+  opacity: calc(1 - var(--p) * 14);
+}
+.fx .cue { display: flex; }
+.fx .cue svg { animation: cue 2.6s var(--easing-default) infinite; }
+@keyframes cue { 0%, 100% { transform: translateY(-3px); } 50% { transform: translateY(4px); } }
+
+@media (min-width: 62rem) {
+  .dusk__horizon, .dawn__horizon { translate: -50% 0; }
+  .dusk__boat, .dusk__glow { translate: -82% 0; }
+  .dusk__reeds { bottom: -26svh; width: max(124vw, 60rem); }
+}
+
+/* ---------- Reading passages ---------- */
+.passage, .midnight, .after { padding: var(--space-12) var(--gutter); }
+.passage { position: relative; }
+.passage__text { max-width: var(--max-width-content); margin-inline: auto; }
+/* The star field thins out behind reading text. */
+.passage__text, .midnight__inner { position: relative; }
+:is(.passage__text, .midnight__inner)::before {
+  content: "";
+  position: absolute;
+  inset: -5rem -7rem;
+  z-index: -1;
+  background: radial-gradient(closest-side, var(--color-bg-primary) 62%, transparent);
+  pointer-events: none;
+}
+.passage__text > * + * { margin-top: var(--space-7); }
+.passage__text > h2 + p { margin-top: var(--space-9); font-size: var(--font-size-md); line-height: 1.5; }
+
+.passage--over { margin-top: calc(var(--space-11) * -1); z-index: 1; }
+
+.term {
+  display: grid;
+  gap: var(--space-5);
+  margin-top: var(--space-9) !important;
+  padding-top: var(--space-7);
+  border-top: 1px solid var(--color-border-primary);
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-normal);
+  color: var(--color-text-secondary);
+}
+.term b { font-family: var(--font-family-display); font-weight: var(--font-weight-medium); letter-spacing: 0.04em; color: var(--color-text-primary); }
+.glyphs {
+  font-family: var(--font-family-glyph);
+  font-size: 2.5rem;
+  line-height: 1;
+  letter-spacing: 0.05em;
+  white-space: nowrap;
+  color: var(--color-accent-primary);
+}
+.translit { font-style: italic; margin-inline: 0.2em 0.5em; color: var(--color-text-primary); }
+@media (min-width: 34rem) {
+  .term { grid-template-columns: auto 1fr; gap: var(--space-8); align-items: center; }
+}
+
+/* Ra beside the first passage */
+.passage__figure { position: relative; max-width: 22rem; margin: var(--space-10) auto 0; }
+.ra__img { position: relative; width: 100%; transform: translate3d(0, calc((0.5 - var(--p)) * 10%), 0); }
+.ra__disc {
+  position: absolute;
+  left: 50%; top: -4%;
+  width: 92%;
+  aspect-ratio: 1;
+  translate: -50% 0;
+  border-radius: 50%;
+  background: radial-gradient(circle, color-mix(in oklch, var(--gold-400) 34%, transparent) 0%, color-mix(in oklch, var(--carnelian-400) 12%, transparent) 45%, transparent 68%);
+  transform: translate3d(0, calc((0.5 - var(--p)) * -18%), 0);
+}
+@media (min-width: 64rem) {
+  .passage--figure {
+    display: grid;
+    grid-template-columns: minmax(0, 40rem) minmax(16rem, 26rem);
+    justify-content: center;
+    align-items: start;
+    gap: var(--space-11);
+  }
+  .passage--figure .passage__text { margin: 0; }
+  .passage__figure { position: sticky; top: 14svh; max-width: none; margin: 0; }
+  .passage--left .passage__text { margin-left: max(0rem, calc(50vw - 36rem)); }
+}
+
+/* ---------- Plates: painted scenes that melt into the ground ---------- */
+.plate {
+  position: relative;
+  height: clamp(20rem, 72svh, 54rem);
+  margin: 0;
+  overflow: clip;
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 20%, #000 70%, transparent 100%);
+  mask-image: linear-gradient(to bottom, transparent 0, #000 20%, #000 70%, transparent 100%);
+}
+.plate__img {
+  position: absolute;
+  left: 0; top: -12%;
+  width: 100%; height: 124%;
+  max-width: none;
+  object-fit: cover;
+  transform: translate3d(0, calc((var(--p) - 0.5) * -12%), 0) scale(calc(1.03 + var(--p) * 0.12));
+}
+
+/* Apep: the plate pulls back while the head comes out of the dark */
+.apep { --p: 1; position: relative; }
+/* Taller, and faded less at the top: the head and its burning eye sit high in the frame. */
+.plate--apep {
+  height: clamp(22rem, 88svh, 58rem);
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 10%, #000 72%, transparent 100%);
+  mask-image: linear-gradient(to bottom, transparent 0, #000 10%, #000 72%, transparent 100%);
+}
+.apep .plate__img {
+  object-position: 62% 30%;
+  transform: translate3d(0, calc((var(--p) - 0.5) * -12%), 0) scale(calc(1.16 - var(--p) * 0.12));
+}
+.apep__head {
+  --e: clamp(0, calc((var(--p) - 0.2) / 0.45), 1);
+  position: absolute;
+  z-index: 2;
+  right: 0; bottom: -14%;
+  width: min(96vw, 60rem);
+  max-width: none;
+  pointer-events: none;
+  opacity: clamp(0, calc(var(--e) * 3), 1);
+  transform: translate3d(calc((1 - var(--e)) * 62%), calc((1 - var(--e)) * 5%), 0);
+  filter: drop-shadow(0 2rem 3rem oklch(0.04 0.02 268 / 0.75));
+}
+.apep + .passage { padding-top: calc(var(--space-12) + 18vw); }
+@media (min-width: 64rem) {
+  .apep__head { bottom: -46%; width: min(58vw, 60rem); }
+  .apep + .passage { padding-top: var(--space-12); }
+}
+
+/* ---------- Midnight: the quietest point ---------- */
+.midnight { display: grid; place-items: center; min-height: 100svh; text-align: center; }
+.midnight__inner { max-width: 36rem; }
+.midnight__inner > * + * { margin-top: var(--space-7); }
+.midnight h2::after { margin-inline: auto; }
+.midnight p { font-size: var(--font-size-md); line-height: 1.6; color: var(--color-text-secondary); }
+.midnight p:last-child { color: var(--carnelian-400); }
+
+/* ---------- The seventh hour ---------- */
+.battle { --p: 1; }
+.battle .stage { display: grid; align-items: end; background: var(--carnelian-900); }
+.battle__plate {
+  object-position: 46% 50%;
+  transform-origin: 56% 52%;
+  transform: scale(calc(1.03 + var(--p) * 0.15));
+}
+/* Narrow screens see a fifth of the plate, so the camera pans: from Set, along the spear, to the
+   serpent's mouth. The image is laid out at full width and slid by transform (compositor only). */
+@media (max-width: 47.99rem) {
+  .battle__plate { object-position: 58% 50%; }
+  .fx .battle__plate {
+    inset: 0 auto 0 0;
+    width: auto;
+    height: 100%;
+    max-width: none;
+    aspect-ratio: 1376 / 582;
+    transform-origin: 0 50%;
+    transform: translate3d(calc((0.3 + var(--p) * 0.34) * (100vw - 100%)), 0, 0);
+  }
+}
+.battle__flash {
+  --q: calc(var(--p) * 7 - 1);
+  background: radial-gradient(circle at 56% 52%, color-mix(in oklch, var(--gold-200) 85%, transparent), transparent 42%);
+  mix-blend-mode: screen;
+  opacity: clamp(0, min(calc(var(--q) * 6), calc((0.7 - var(--q)) * 2.5)), 0.85);
+}
+.battle__scrim { background: color-mix(in oklch, var(--night-scrim) 80%, transparent); }
+/* Film layer: the scrim lives where the words are, and leaves the spear strike clear. */
+.fx .battle__scrim {
+  background:
+    linear-gradient(to top, color-mix(in oklch, var(--night-scrim) 96%, transparent) 0%, color-mix(in oklch, var(--night-scrim) 84%, transparent) 46%, transparent 82%),
+    linear-gradient(to bottom, color-mix(in oklch, var(--night-scrim) 75%, transparent), transparent 22%);
+}
+@media (min-width: 64rem) {
+  .fx .battle__scrim {
+    background:
+      linear-gradient(to right, color-mix(in oklch, var(--night-scrim) 92%, transparent) 0%, color-mix(in oklch, var(--night-scrim) 74%, transparent) 36%, transparent 70%),
+      linear-gradient(to top, color-mix(in oklch, var(--night-scrim) 90%, transparent) 0%, transparent 50%),
+      linear-gradient(to bottom, color-mix(in oklch, var(--night-scrim) 75%, transparent), transparent 22%);
+  }
+}
+
+.battle__text {
+  position: relative;
+  z-index: 2;
+  width: min(100%, 50rem);
+  padding: var(--space-12) var(--gutter) calc(var(--space-11) + env(safe-area-inset-bottom));
+}
+.beats { display: grid; gap: var(--space-9); margin: var(--space-9) 0 0; padding: 0; list-style: none; }
+.beat h3 { margin-bottom: var(--space-5); color: var(--sand-100); }
+.beat p { max-width: 38rem; color: var(--sand-100); }
+.beat__lede { font-size: var(--font-size-md); line-height: 1.5; }
+
+.fx .battle__text { padding-top: var(--space-9); }
+.fx .beats { gap: 0; min-height: 15rem; }
+.fx .beat {
+  --q: calc(var(--p) * var(--n) - var(--i));
+  grid-area: 1 / 1;
+  align-self: end;
+  /* quick cross-fades: each beat is fully legible for three quarters of its slot */
+  opacity: clamp(0, min(calc(var(--q) * 8), calc((1 - var(--q)) * 8)), 1);
+  transform: translate3d(0, calc((0.5 - var(--q)) * 1.25rem), 0);
+}
+.fx .beat--first { opacity: clamp(0, calc((1 - var(--q)) * 8), 1); }
+.fx .beat--last { opacity: clamp(0, calc(var(--q) * 8), 1); }
+
+@media (max-height: 40rem) {
+  .fx .battle__text { padding-block: var(--space-10) var(--space-8); }
+  .battle__text h2 { font-size: var(--font-size-lg); }
+  .battle__text h2::after { margin-top: var(--space-5); }
+  .fx .beats { margin-top: var(--space-7); min-height: 11rem; }
+  .beat h3 { font-size: var(--font-size-md); }
+}
+
+/* ---------- On earth ---------- */
+.ritual { display: grid; gap: var(--space-9); padding: var(--space-11) 0 var(--space-12); }
+.ritual .passage__text { width: 100%; padding-inline: var(--gutter); }
+.acts { margin: var(--space-9) 0 !important; padding: 0; list-style: none; counter-reset: act; border-top: 1px solid var(--color-border-secondary); }
+.act {
+  counter-increment: act;
+  display: grid;
+  grid-template-columns: 2.75rem 1fr;
+  align-items: baseline;
+  padding: var(--space-6) 0;
+  border-bottom: 1px solid var(--color-border-secondary);
+  font-family: var(--font-family-display);
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-light);
+  line-height: 1.2;
+  color: var(--gold-200);
+  transition: color var(--duration-slower) var(--easing-out), text-shadow var(--duration-slower) var(--easing-out);
+}
+.act::before {
+  content: counter(act, upper-roman);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+  letter-spacing: var(--letter-spacing-wide);
+  color: var(--carnelian-400);
+  transition: color var(--duration-slower) var(--easing-out);
+}
+.fx.ready .act:not(.is-lit) { color: var(--sand-500); }
+.fx.ready .act:not(.is-lit)::before { color: var(--sand-500); }
+.fx.ready .act.is-lit { text-shadow: 0 0.15em 1.6rem color-mix(in oklch, var(--carnelian-400) 75%, transparent); }
+
+@media (min-width: 64rem) {
+  .ritual {
+    /* the plate column is wide enough to hold all three priests */
+    grid-template-columns: minmax(0, 1.3fr) minmax(0, 36rem) minmax(var(--gutter), 0.2fr);
+    align-items: start;
+    gap: var(--space-10);
+  }
+  .plate--ritual {
+    position: sticky;
+    top: 12svh;
+    height: 76svh;
+    -webkit-mask-image: linear-gradient(to right, #000 60%, transparent 100%), linear-gradient(to bottom, transparent 0, #000 16%, #000 80%, transparent 100%);
+    mask-image: linear-gradient(to right, #000 60%, transparent 100%), linear-gradient(to bottom, transparent 0, #000 16%, #000 80%, transparent 100%);
+    -webkit-mask-composite: source-in;
+    mask-composite: intersect;
+  }
+  .ritual .passage__text { padding-inline: 0; margin: 0; }
+}
+
+/* ---------- Dawn ---------- */
+.passage--centre { padding-bottom: var(--space-11); }
+
+.dawn { --p: 1; --horizon-w: max(100vw, 62rem); --horizon-h: calc(var(--horizon-w) * 0.317); }
+.dawn .stage { --r: clamp(0, calc((var(--p) - 0.08) / 0.62), 1); background: var(--lapis-950); }
+.dawn__sky {
+  height: 90%;
+  object-position: 50% 100%;
+  transform-origin: 50% 100%;
+  transform: translate3d(0, calc((1 - var(--p)) * 3%), 0) scale(1.06);
+}
+.dawn__night { background: linear-gradient(to bottom, var(--lapis-950) 30%, var(--lapis-900)); opacity: calc(1 - var(--r)); }
+.dawn__sun {
+  --sun: min(max(30vw, 14rem), 46svh);
+  position: absolute;
+  left: 50%; top: 74svh;
+  width: var(--sun);
+  aspect-ratio: 1;
+  translate: -50% 0;
+  border-radius: 50%;
+  background: radial-gradient(circle at 50% 50%, oklch(0.995 0.02 95) 0%, oklch(0.97 0.07 95) 38%, var(--gold-400) 100%);
+  box-shadow:
+    0 0 calc(var(--sun) * 0.3) calc(var(--sun) * 0.1) color-mix(in oklch, var(--gold-200) 80%, transparent),
+    0 0 calc(var(--sun) * 1.1) calc(var(--sun) * 0.4) color-mix(in oklch, var(--gold-400) 45%, transparent);
+  transform: translate3d(0, calc(var(--p) * -50svh), 0);
+}
+.dawn__khepri {
+  position: absolute;
+  left: 50%; top: 76svh;
+  width: min(74vw, 30rem);
+  max-width: none;
+  translate: -50% 0;
+  opacity: clamp(0, calc((var(--p) - 0.12) * 3.5), 1);
+  transform: translate3d(0, calc(var(--p) * -53svh), 0) scale(calc(0.8 + var(--p) * 0.2));
+  filter: drop-shadow(0 1.5rem 2.5rem oklch(0.2 0.06 60 / 0.45));
+}
+.dawn__horizon { scale: -1 1; filter: brightness(calc(0.28 + var(--r) * 0.8)); }
+.dawn__seam {
+  background: linear-gradient(to bottom, transparent 58%, var(--limestone-50) 100%);
+  opacity: clamp(0, calc((var(--p) - 0.6) / 0.3), 1);
+}
+.dawn__line {
+  position: absolute;
+  inset: 10svh var(--gutter) auto;
+  text-align: center;
+  font-family: var(--font-family-display);
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-light);
+  line-height: 1.25;
+  color: var(--limestone-50);
+  text-shadow: 0 1px 1.5rem oklch(0.2 0.08 262 / 0.75);
+  opacity: clamp(0, calc((var(--p) - 0.45) / 0.2), 1);
+}
+.dawn__line span { display: block; font-weight: var(--font-weight-medium); }
+
+/* ---------- After: daylight ---------- */
+.after {
+  position: relative;
+  z-index: 1;
+  padding-bottom: calc(var(--space-13) + env(safe-area-inset-bottom));
+  background: var(--color-bg-primary);
+  color: var(--color-text-primary);
+}
+.after__grid { display: grid; gap: var(--space-11); max-width: var(--max-width-wide); margin: var(--space-12) auto 0; }
+.after h3 { margin-bottom: var(--space-7); color: var(--color-text-primary); }
+.after h3:not(:first-child) { margin-top: var(--space-10); }
+
+.glossary dl { margin: 0; }
+.glossary dl > div { padding: var(--space-6) 0; border-top: 1px solid var(--color-border-secondary); }
+.glossary dl > div:last-child { border-bottom: 1px solid var(--color-border-secondary); }
+.glossary dt {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--space-3) var(--space-6);
+  font-family: var(--font-family-display);
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-medium);
+  letter-spacing: 0.03em;
+}
+.glossary .glyphs { font-size: 2.1rem; font-weight: 400; min-width: 9.5rem; }
+.glossary .translit { font-family: var(--font-family-body); font-weight: 400; color: var(--color-text-secondary); }
+.glossary dd { margin: var(--space-3) 0 0; color: var(--color-text-secondary); }
+.note { margin-top: var(--space-6); font-size: var(--font-size-sm); font-style: italic; color: var(--color-text-tertiary); }
+
+.sources ul { margin: 0; padding: 0; list-style: none; }
+.sources li { padding: var(--space-5) 0; border-top: 1px solid var(--color-border-secondary); font-size: var(--font-size-sm); line-height: var(--line-height-normal); color: var(--color-text-secondary); }
+.sources li:last-child { border-bottom: 1px solid var(--color-border-secondary); }
+.sources cite { color: var(--color-text-primary); }
+.sources p { font-size: var(--font-size-sm); line-height: var(--line-height-normal); color: var(--color-text-secondary); }
+
+@media (min-width: 64rem) { .after__grid { grid-template-columns: 1fr 1fr; align-items: start; } }
+
+.restart { margin-top: var(--space-12); text-align: center; }
+.restart__btn {
+  min-height: 3.5rem;
+  padding: 0 var(--space-9);
+  font-family: var(--font-family-display);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  letter-spacing: var(--letter-spacing-wide);
+  text-transform: uppercase;
+  color: var(--color-accent-primary);
+  background: none;
+  border: 1px solid var(--color-accent-primary);
+  border-radius: var(--border-radius-full);
+  cursor: pointer;
+  transition: background-color var(--duration-normal) var(--easing-default), color var(--duration-normal) var(--easing-default), transform var(--duration-fast) var(--easing-default);
+}
+.restart__btn:hover { background: var(--color-accent-primary); color: var(--color-text-inverse); }
+.restart__btn:active { background: var(--color-accent-primary-active); color: var(--color-text-inverse); transform: scale(0.98); }
+
+/* ---------- Title-card wipe for chapter headings (film layer only, once main.js is up) ---------- */
+/* A feathered mask sweeps across, left to right. A mask rather than clip-path on purpose: Chrome's
+   IntersectionObserver honours the target's own clip-path, so a heading clipped to nothing would
+   never be seen entering the viewport and would never reveal. */
+.fx.ready [data-reveal] {
+  -webkit-mask: linear-gradient(to right, #000 0, #000 50%, transparent 54.5%) 100% 0 / 220% 100% no-repeat;
+  mask: linear-gradient(to right, #000 0, #000 50%, transparent 54.5%) 100% 0 / 220% 100% no-repeat;
+  transition: -webkit-mask-position var(--duration-cinematic) var(--easing-out), mask-position var(--duration-cinematic) var(--easing-out);
+}
+.fx.ready [data-reveal].is-in { -webkit-mask-position: 0 0; mask-position: 0 0; }
