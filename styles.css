@@ -494,7 +494,7 @@ img.layer { object-fit: cover; }
 :is(.passage__text, .midnight__inner)::before {
   content: "";
   position: absolute;
-  inset: -5rem -7rem;
+  inset: -5rem calc(-1 * var(--gutter)); /* keep the reading scrim inside narrow viewports */
   z-index: -1;
   background: radial-gradient(closest-side, var(--color-bg-primary) 62%, transparent);
   pointer-events: none;
@@ -573,7 +573,7 @@ img.layer { object-fit: cover; }
 }
 
 /* Apep: the plate pulls back while the head comes out of the dark */
-.apep { --p: 1; position: relative; }
+.apep { --p: 1; position: relative; overflow-x: clip; }
 /* Taller, and faded less at the top: the head and its burning eye sit high in the frame. */
 .plate--apep {
   height: clamp(22rem, 88svh, 58rem);
@@ -598,7 +598,7 @@ img.layer { object-fit: cover; }
 }
 .apep + .passage { padding-top: calc(var(--space-12) + 18vw); }
 @media (min-width: 64rem) {
-  .apep__head { bottom: -46%; width: min(58vw, 60rem); }
+  .apep__head { bottom: -8%; width: min(58vw, 60rem); } /* keep the jaws above the reading column */
   .apep + .passage { padding-top: var(--space-12); }
 }
 
@@ -627,7 +627,7 @@ img.layer { object-fit: cover; }
     width: auto;
     height: 100%;
     max-width: none;
-    aspect-ratio: 1376 / 582;
+    aspect-ratio: 1672 / 941;
     transform-origin: 0 50%;
     transform: translate3d(calc((0.3 + var(--p) * 0.34) * (100vw - 100%)), 0, 0);
   }
@@ -689,6 +689,7 @@ img.layer { object-fit: cover; }
 /* ---------- On earth ---------- */
 .ritual { display: grid; gap: var(--space-9); padding: var(--space-11) 0 var(--space-12); }
 .ritual .passage__text { width: 100%; padding-inline: var(--gutter); }
+.ritual .passage__text::before { inset-inline: 0; }
 .acts { margin: var(--space-9) 0 !important; padding: 0; list-style: none; counter-reset: act; border-top: 1px solid var(--color-border-secondary); }
 .act {
   counter-increment: act;

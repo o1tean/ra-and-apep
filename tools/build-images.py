@@ -15,6 +15,7 @@ OUT = RAW.parent
 
 PLATES = ["sky-dusk", "duat", "apep", "battle", "ritual", "sky-dawn"]  # opaque, Antigravity
 CUTOUTS = ["horizon", "barque", "reeds", "ra", "apep-head", "khepri"]  # alpha, Codex
+FULL_PLATES = ["duat-v2", "battle-v2"]  # full-frame Codex paintings, no letterbox crop
 
 
 def content_rows(im):
@@ -56,6 +57,14 @@ def build_cutout(name):
     return im.size
 
 
+def build_full_plate(name, out=OUT):
+    im = Image.open(RAW / f"{name}.png").convert("RGB")
+    for width, quality in ((960, 85), (1672, 87)):
+        scaled = im.copy()
+        scaled.thumbnail((width, im.height), Image.LANCZOS)
+        scaled.save(out / f"{name}-{width}.webp", quality=quality, method=6)
+
+
 if __name__ == "__main__":
     for name in PLATES:
         if (RAW / f"{name}.jpg").exists():
@@ -69,3 +78,7 @@ if __name__ == "__main__":
             print(f"cutout  {name:10s} {size[0]}x{size[1]} ({kb} KB)")
         else:
             print(f"cutout  {name:10s} MISSING in raw/")
+    for name in FULL_PLATES:
+        if (RAW / f"{name}.png").exists():
+            build_full_plate(name)
+            print(f"plate   {name:10s} full frame, 960 px and 1672 px maximum widths")

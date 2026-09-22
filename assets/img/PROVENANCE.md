@@ -1,10 +1,21 @@
 # Image provenance
 
-Every raster on the site is AI-generated for this project on 2026-09-21. Nothing here is a photograph, a museum object or a scan. The page says so in its "About the pictures" note.
+Every raster on the site is AI-generated for this project on 2026-09-21 or 2026-09-22. Nothing here is a photograph, a museum object or a scan. The page says so in its "About the pictures" note.
 
-The exact prompts, including the shared style bible, are kept beside the images in `prompts/`. The originals as delivered by each generator are in `raw/`; `tools/build-images.py` turns them into the shipped WebP files (letterbox crop, Lanczos upscale of plates to 2048 px, alpha trim of cut-outs) and is safe to re-run.
+The exact prompts, including the shared style bible, are kept beside the images in `prompts/`. The originals as delivered by each generator are in `raw/`; `tools/build-images.py` turns them into the shipped WebP files and is safe to re-run. Legacy plates use a letterbox crop and upscale to 2048 px; the refreshed plates retain their full frame and native resolution.
+
+## Refreshed plates: OpenAI built-in `image_gen`, 2026-09-22
+
+Used by both language editions. Prompt set: `prompts/codex-plates-v2.md`. The generator returned 1672 × 941 px; the site serves that native size or a 960 × 540 px WebP, with no upscaling. The earlier images remain available beside them.
+
+| Shipped files | Raw | Notes |
+| --- | --- | --- |
+| `duat-v2-960.webp`, `duat-v2-1672.webp` | `raw/duat-v2.png` | Sandstone gates, cobra guardians, blue cavern haze and a golden prow; clearer depth and stone texture |
+| `battle-v2-960.webp`, `battle-v2-1672.webp` | `raw/battle-v2.png` | Seth's Set-animal head and continuous spear; Apep confronts the barque over a dry riverbed, matching the story |
 
 ## Plates: Google Antigravity CLI (`agy` 1.2.7), built-in image generation tool
+
+The original Duat and battle plates below are retained for reference; the site now uses the refreshed versions above.
 
 Dispatched through the `agy-delegate` relay. The run painted all six plates and then lost its connection before writing its final report, so the image model's exact label was never recorded; the files were recovered from Antigravity's own artifact folder. Prompt: `prompts/antigravity-plates.txt`.
 

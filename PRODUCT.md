@@ -30,7 +30,7 @@ Read once, top to bottom, at the reader's own pace. No accounts, no forms, no da
 
 - At least 1,000 words of visible narrative copy (user requirement), in each edition: English at `/`, Romanian at `/ro/`.
 - Cinematic, Apple-grade scroll animation and layered parallax (user requirement).
-- Illustrations are AI-generated: full-bleed plates by Google Antigravity (Gemini), transparent cut-outs by OpenAI Codex (`image_gen`). Generated images contain no writing, because generated hieroglyphs are gibberish.
+- Illustrations are AI-generated: the Duat and battle plates and transparent cut-outs by OpenAI (`image_gen`), the other full-bleed plates by Google Antigravity (Gemini). Prompts exclude writing; authentic hieroglyphs are rendered as text.
 - Native scrolling is never hijacked; pinned scenes use `position: sticky`.
 
 ## Brand Commitments
