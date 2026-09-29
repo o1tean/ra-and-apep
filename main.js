@@ -2,163 +2,328 @@
   'use strict';
 
   const root = document.documentElement;
-  const clamp01 = (v) => Math.min(1, Math.max(0, v));
+  const motionButton = document.querySelector('.motion');
+  const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)');
+  const parameters = new URLSearchParams(location.search);
+  const skipSmoothing = parameters.has('still');
 
-  /** Pinned: how far the sticky stage has travelled down its track.
-   *  Through: 0 as the top edge enters the viewport, 1 as the bottom edge leaves it. */
-  function progress(top, height, scrollY, view, pinned) {
-    const y = scrollY - top;
-    return pinned ? clamp01(y / Math.max(1, height - view)) : clamp01((y + view) / (height + view));
-  }
-
-  const params = new URLSearchParams(location.search);
-  const still = params.has('still'); // testing aid: snap to the scroll position instead of easing toward it
-
-  if (params.has('selfcheck')) {
-    const near = (a, b) => Math.abs(a - b) < 1e-9;
-    const cases = [
-      [progress(1000, 3000, 1000, 800, true), 0], [progress(1000, 3000, 2100, 800, true), 0.5],
-      [progress(1000, 3000, 3200, 800, true), 1], [progress(1000, 3000, 0, 800, true), 0],
-      [progress(1000, 3000, 9000, 800, true), 1], [progress(1000, 800, 1500, 800, true), 1],
-      [progress(1000, 600, 200, 800, false), 0], [progress(1000, 600, 900, 800, false), 0.5],
-      [progress(1000, 600, 1600, 800, false), 1],
-    ];
-    const bad = cases.filter(([got, want]) => !near(got, want));
-    console[bad.length ? 'error' : 'log'](bad.length ? `selfcheck FAILED ${JSON.stringify(bad)}` : 'selfcheck ok');
-  }
-
-  const scenes = [...document.querySelectorAll('[data-scene]')].map((el) => ({
-    el,
-    pin: el.dataset.scene === 'pin',
-    stage: el.querySelector('.stage'),
-    top: 0, height: 0, view: 0, p: 0, shown: -1, live: true,
+  // Fiecare scenă are propriul progres: 0 la început, 1 la sfârșit.
+  const scenes = [...document.querySelectorAll('[data-scene]')].map((element) => ({
+    element,
+    isPinned: element.dataset.scene === 'pin',
+    stage: element.querySelector('.stage'),
+    top: 0,
+    height: 0,
+    stageHeight: 0,
+    progress: 0,
+    displayedProgress: -1,
+    isNearby: true,
   }));
-  const chapters = [...document.querySelectorAll('[data-hours]')].map((el) => {
-    const [a, b] = el.dataset.hours.split('-').map(Number);
-    return { el, a, b, phase: el.dataset.phase, top: 0, height: 0 };
+
+  const chapters = [...document.querySelectorAll('[data-hours]')].map((element) => {
+    const [startHour, endHour] = element.dataset.hours.split('-').map(Number);
+    return {
+      element,
+      startHour,
+      endHour,
+      phase: element.dataset.phase,
+      top: 0,
+      height: 0,
+    };
   });
 
-  const acts = [...document.querySelectorAll('.act')].map((el) => ({ el, top: 0, lit: false }));
+  const ritualSteps = [...document.querySelectorAll('.act')].map((element) => ({
+    element,
+    top: 0,
+    isLit: false,
+  }));
 
-  const fx = () => root.classList.contains('fx');
-  let vh = 0, maxScroll = 1, raf = 0, last = 0;
+  let viewportHeight = 0;
+  let maxScroll = 1;
+  let animationFrameId = 0;
+  let previousFrameTime = 0;
+  let savedMotion = null;
 
-  function target(s, y) {
-    return progress(s.top, s.height, y, s.pin ? s.view : vh, s.pin);
+  try {
+    savedMotion = localStorage.getItem('motion');
+  } catch {
+    // Unele browsere blochează stocarea locală. Butonul funcționează și fără ea.
   }
 
-  function measure(snap) {
-    const y = window.scrollY;
-    vh = root.clientHeight; // the layout viewport CSS sees; innerHeight can disagree under device emulation
-    maxScroll = Math.max(1, root.scrollHeight - vh);
-    for (const item of [...scenes, ...chapters, ...acts]) {
-      const r = item.el.getBoundingClientRect();
-      item.top = r.top + y;
-      item.height = r.height;
+  // Calcule pentru poziția în pagină
+  function clampProgress(value) {
+    return Math.min(1, Math.max(0, value));
+  }
+
+  function getScrollProgress(top, height, scrollY, viewHeight, isPinned) {
+    const distance = scrollY - top;
+
+    if (isPinned) {
+      // Scena rămâne lipită de ecran cât timp parcurgem secțiunea ei.
+      const travelDistance = Math.max(1, height - viewHeight);
+      return clampProgress(distance / travelDistance);
     }
-    for (const s of scenes) {
-      s.view = s.stage ? s.stage.offsetHeight : vh;
-      if (snap) s.p = target(s, y); // arrive in place; never glide in from zero
+
+    // Pentru o secțiune obișnuită, numărăm de la intrarea până la ieșirea din ecran.
+    return clampProgress((distance + viewHeight) / (height + viewHeight));
+  }
+
+  function getSceneProgress(scene, scrollY) {
+    const viewHeight = scene.isPinned ? scene.stageHeight : viewportHeight;
+    return getScrollProgress(scene.top, scene.height, scrollY, viewHeight, scene.isPinned);
+  }
+
+  function animationsEnabled() {
+    return root.classList.contains('fx');
+  }
+
+  function measureLayout(snapToScroll) {
+    const scrollY = window.scrollY;
+    // clientHeight corespunde înălțimii folosite de CSS, inclusiv în simularea unui telefon.
+    viewportHeight = root.clientHeight;
+    maxScroll = Math.max(1, root.scrollHeight - viewportHeight);
+
+    for (const item of [...scenes, ...chapters, ...ritualSteps]) {
+      const bounds = item.element.getBoundingClientRect();
+      item.top = bounds.top + scrollY;
+      item.height = bounds.height;
+    }
+
+    for (const scene of scenes) {
+      scene.stageHeight = scene.stage ? scene.stage.offsetHeight : viewportHeight;
+      if (snapToScroll) {
+        // La încărcare sau la schimbarea modului, pornim direct din poziția cititorului.
+        scene.progress = getSceneProgress(scene, scrollY);
+      }
     }
   }
 
-  function chapterAt(mid) {
-    let c = chapters[0];
-    for (const ch of chapters) if (ch.top <= mid) c = ch; // document order
-    return c;
+  function getChapterAt(position) {
+    let currentChapter = chapters[0];
+
+    // Capitolele sunt deja în ordinea din HTML.
+    for (const chapter of chapters) {
+      if (chapter.top <= position) {
+        currentChapter = chapter;
+      }
+    }
+    return currentChapter;
   }
 
-  function frame(now) {
-    raf = 0;
-    const k = still ? 1 : 1 - Math.exp(-Math.min(64, now - last || 16) / 110); // ~110 ms to catch the scrollbar
-    last = now;
-    const y = window.scrollY;
-    let moving = false;
+  // Actualizarea animațiilor și a ceasului din marginea paginii
+  function renderFrame(now) {
+    animationFrameId = 0;
+    const elapsed = Math.min(64, now - previousFrameTime || 16);
+    // Apropiem treptat animația de poziția derulării, ca mișcarea să nu fie bruscă.
+    const smoothing = skipSmoothing ? 1 : 1 - Math.exp(-elapsed / 110);
+    previousFrameTime = now;
+    const scrollY = window.scrollY;
+    const motionEnabled = animationsEnabled();
+    let needsAnotherFrame = false;
 
-    if (fx()) {
-      for (const s of scenes) {
-        if (!s.live) continue;
-        const t = target(s, y);
-        s.p += (t - s.p) * k;
-        if (Math.abs(t - s.p) < 0.0004) s.p = t; else moving = true;
-        if (s.p !== s.shown) { s.el.style.setProperty('--p', s.p.toFixed(4)); s.shown = s.p; }
+    if (motionEnabled) {
+      for (const scene of scenes) {
+        if (!scene.isNearby) continue;
+
+        const targetProgress = getSceneProgress(scene, scrollY);
+        scene.progress += (targetProgress - scene.progress) * smoothing;
+
+        if (Math.abs(targetProgress - scene.progress) < 0.0004) {
+          scene.progress = targetProgress;
+        } else {
+          needsAnotherFrame = true;
+        }
+
+        if (scene.progress !== scene.displayedProgress) {
+          // CSS-ul folosește această valoare pentru poziții, opacitate și mărime.
+          scene.element.style.setProperty('--progress', scene.progress.toFixed(4));
+          scene.displayedProgress = scene.progress;
+        }
       }
     }
 
-    // Where in the night are we? Drives the rail's sun, the chrome colour and the star drift.
-    const mid = y + vh / 2;
-    const c = chapterAt(mid);
-    const t = clamp01((mid - c.top) / c.height);
-    root.style.setProperty('--hour', (c.a + (c.b - c.a) * t).toFixed(3));
-    root.style.setProperty('--scrolled', clamp01(y / maxScroll).toFixed(4));
-    if (root.dataset.phase !== c.phase) root.dataset.phase = c.phase;
-    // The chrome turns from sand to ink once the sky behind it is bright.
-    // (With motion off the dawn rests fully risen, so it is bright from its first pixel.)
-    const ink = c.phase === 'day' || (c.phase === 'dawn' && (t > 0.6 || !fx())) ? 'dark' : 'light';
-    if (root.dataset.ink !== ink) root.dataset.ink = ink;
-    const sun = c !== chapters[0] || t > 0.78 ? 'down' : 'up';
-    if (root.dataset.sun !== sun) root.dataset.sun = sun;
-    // The ritual acts ignite as they pass the middle of the screen and stay lit, jump or scroll.
-    for (const a of acts) if (!a.lit && a.top < y + vh * 0.56) { a.lit = true; a.el.classList.add('is-lit'); }
+    const screenMiddle = scrollY + viewportHeight / 2;
+    const chapter = getChapterAt(screenMiddle);
+    const chapterProgress = clampProgress((screenMiddle - chapter.top) / chapter.height);
+    const currentHour = chapter.startHour + (chapter.endHour - chapter.startHour) * chapterProgress;
 
-    if (moving) raf = requestAnimationFrame(frame);
+    root.style.setProperty('--hour', currentHour.toFixed(3));
+    root.style.setProperty('--scrolled', clampProgress(scrollY / maxScroll).toFixed(4));
+    if (root.dataset.phase !== chapter.phase) {
+      root.dataset.phase = chapter.phase;
+    }
+
+    // Pe fundalul luminos, ceasul trece la text închis. În modul static, zorii sunt deja luminoși.
+    const isBrightDawn = chapter.phase === 'dawn' && (chapterProgress > 0.6 || !motionEnabled);
+    const inkColor = chapter.phase === 'day' || isBrightDawn ? 'dark' : 'light';
+    if (root.dataset.ink !== inkColor) {
+      root.dataset.ink = inkColor;
+    }
+
+    const sunPosition = chapter !== chapters[0] || chapterProgress > 0.78 ? 'down' : 'up';
+    if (root.dataset.sun !== sunPosition) {
+      root.dataset.sun = sunPosition;
+    }
+
+    // Pașii ritualului se aprind o singură dată, când ajung spre mijlocul ecranului.
+    for (const step of ritualSteps) {
+      if (!step.isLit && step.top < scrollY + viewportHeight * 0.56) {
+        step.isLit = true;
+        step.element.classList.add('is-lit');
+      }
+    }
+
+    if (needsAnotherFrame) {
+      requestRender();
+    }
   }
-  const kick = () => { if (!raf) raf = requestAnimationFrame(frame); };
 
-  // ---- Motion switch: mirrors the system setting, overrides it, remembers the choice.
-  const button = document.querySelector('.motion');
-  // Each language edition carries its own labels on the button; English is the fallback.
-  const label = (on) => button.dataset[on ? 'on' : 'off'] || (on ? 'Motion on' : 'Motion off');
-  let saved = null;
-  try { saved = localStorage.getItem('motion'); } catch {}
-
-  function setFx(on, remember) {
-    // Layout height changes when scenes pin or unpin, so keep the reader in the same chapter.
-    const mid = window.scrollY + vh / 2;
-    const c = chapterAt(mid);
-    const t = (mid - c.top) / Math.max(1, c.height);
-
-    root.classList.toggle('fx', on);
-    button.setAttribute('aria-pressed', String(on));
-    button.textContent = label(on);
-    if (remember) { saved = on ? 'on' : 'off'; try { localStorage.setItem('motion', saved); } catch {} }
-    if (!on) for (const s of scenes) { s.el.style.removeProperty('--p'); s.shown = -1; }
-
-    measure(false);
-    if (chapters.length && c !== chapters[0]) window.scrollTo({ top: c.top + t * c.height - vh / 2, behavior: 'instant' });
-    measure(true);
-    kick();
+  function requestRender() {
+    // Mai multe evenimente de scroll pot apărea înainte de desenarea unui singur cadru.
+    if (!animationFrameId) {
+      animationFrameId = requestAnimationFrame(renderFrame);
+    }
   }
-  button.hidden = false;
-  button.addEventListener('click', () => setFx(!fx(), true));
-  matchMedia('(prefers-reduced-motion: reduce)').addEventListener('change', (e) => { if (!saved) setFx(!e.matches, false); });
 
-  // ---- Observers: only nearby scenes are driven; headings wipe in once.
-  const watch = (nodes, options, hit) => {
-    const io = new IntersectionObserver((entries) => entries.forEach((e) => hit(e, io)), options);
-    nodes.forEach((n) => io.observe(n));
-  };
-  watch(scenes.map((s) => s.el), { rootMargin: '60% 0px' }, (e) => {
-    scenes.find((s) => s.el === e.target).live = e.isIntersecting;
-    if (e.isIntersecting) kick();
+  // Butonul Animat / Static și preferința salvată
+  function updateMotionButton() {
+    const enabled = animationsEnabled();
+    motionButton.setAttribute('aria-pressed', String(enabled));
+    motionButton.textContent = enabled ? motionButton.dataset.on : motionButton.dataset.off;
+  }
+
+  function setAnimations(enabled, rememberChoice) {
+    // Modul static scurtează pagina. Reținem locul din capitol înainte să schimbăm înălțimile.
+    const screenMiddle = window.scrollY + viewportHeight / 2;
+    const chapter = getChapterAt(screenMiddle);
+    const chapterProgress = (screenMiddle - chapter.top) / Math.max(1, chapter.height);
+
+    root.classList.toggle('fx', enabled);
+    updateMotionButton();
+
+    if (rememberChoice) {
+      savedMotion = enabled ? 'on' : 'off';
+      try {
+        localStorage.setItem('motion', savedMotion);
+      } catch {
+        // Alegerea rămâne valabilă pe pagina curentă, chiar dacă nu o putem salva.
+      }
+    }
+
+    if (!enabled) {
+      for (const scene of scenes) {
+        scene.element.style.removeProperty('--progress');
+        scene.displayedProgress = -1;
+      }
+    }
+
+    measureLayout(false);
+    if (chapter !== chapters[0]) {
+      window.scrollTo({
+        top: chapter.top + chapterProgress * chapter.height - viewportHeight / 2,
+        behavior: 'instant',
+      });
+    }
+    measureLayout(true);
+    requestRender();
+  }
+
+  // Urmărim doar scenele apropiate de ecran, ca să nu animăm toată pagina deodată.
+  const sceneObserver = new IntersectionObserver(
+    (entries) => {
+      for (const entry of entries) {
+        const scene = scenes.find((scene) => scene.element === entry.target);
+        scene.isNearby = entry.isIntersecting;
+        if (entry.isIntersecting) {
+          requestRender();
+        }
+      }
+    },
+    { rootMargin: '60% 0px' },
+  );
+
+  for (const scene of scenes) {
+    sceneObserver.observe(scene.element);
+  }
+
+  // Titlurile apar o singură dată; după aceea nu mai trebuie urmărite.
+  const headingObserver = new IntersectionObserver(
+    (entries) => {
+      for (const entry of entries) {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('is-in');
+          headingObserver.unobserve(entry.target);
+        }
+      }
+    },
+    { threshold: 0.4 },
+  );
+
+  for (const heading of document.querySelectorAll('[data-reveal]')) {
+    headingObserver.observe(heading);
+  }
+
+  // Evenimentele paginii
+  motionButton.hidden = false;
+  motionButton.addEventListener('click', () => {
+    setAnimations(!animationsEnabled(), true);
   });
-  watch(document.querySelectorAll('[data-reveal]'), { threshold: 0.4 }, (e, io) => {
-    if (e.isIntersecting) { e.target.classList.add('is-in'); io.unobserve(e.target); }
+
+  reducedMotion.addEventListener('change', (event) => {
+    // Respectăm setarea sistemului doar dacă cititorul nu a ales deja un mod.
+    if (!savedMotion) {
+      setAnimations(!event.matches, false);
+    }
   });
 
   document.querySelector('.restart__btn').addEventListener('click', () => {
-    window.scrollTo({ top: 0, behavior: fx() ? 'smooth' : 'instant' });
+    window.scrollTo({ top: 0, behavior: animationsEnabled() ? 'smooth' : 'instant' });
   });
 
-  const remeasure = () => { measure(false); kick(); };
-  addEventListener('scroll', kick, { passive: true });
-  addEventListener('resize', remeasure);
-  addEventListener('load', remeasure);
-  if (document.fonts) document.fonts.ready.then(remeasure);
+  function refreshLayout() {
+    measureLayout(false);
+    requestRender();
+  }
 
-  button.setAttribute('aria-pressed', String(fx()));
-  button.textContent = label(fx());
-  measure(true);
+  window.addEventListener('scroll', requestRender, { passive: true });
+  window.addEventListener('resize', refreshLayout);
+  window.addEventListener('load', refreshLayout);
+  if (document.fonts) {
+    document.fonts.ready.then(refreshLayout);
+  }
+
+  // Pornirea paginii
+  updateMotionButton();
+  measureLayout(true);
   root.classList.add('ready');
-  kick();
+  requestRender();
+
+  // Verificare rapidă: deschide index.html?selfcheck și uită-te în consola browserului.
+  // Cu ?still, animațiile urmăresc exact derularea, fără întârzierea de netezire.
+  if (parameters.has('selfcheck')) {
+    const checks = [
+      // Scenă fixată: început, mijloc, sfârșit și poziții din afara secțiunii.
+      [getScrollProgress(1000, 3000, 1000, 800, true), 0],
+      [getScrollProgress(1000, 3000, 2100, 800, true), 0.5],
+      [getScrollProgress(1000, 3000, 3200, 800, true), 1],
+      [getScrollProgress(1000, 3000, 0, 800, true), 0],
+      [getScrollProgress(1000, 3000, 9000, 800, true), 1],
+      // Când scena încape în ecran, calculul trebuie să evite împărțirea la zero.
+      [getScrollProgress(1000, 800, 1000, 800, true), 0],
+      [getScrollProgress(1000, 800, 1500, 800, true), 1],
+      // Secțiune obișnuită: aceleași poziții de referință.
+      [getScrollProgress(1000, 600, 200, 800, false), 0],
+      [getScrollProgress(1000, 600, 900, 800, false), 0.5],
+      [getScrollProgress(1000, 600, 1600, 800, false), 1],
+      [getScrollProgress(1000, 600, 0, 800, false), 0],
+      [getScrollProgress(1000, 600, 9000, 800, false), 1],
+    ];
+
+    for (const [actual, expected] of checks) {
+      if (Math.abs(actual - expected) > 1e-9 || !Number.isFinite(actual)) {
+        throw new Error(`Progres incorect: ${actual}; valoarea așteptată: ${expected}`);
+      }
+    }
+    console.log(`selfcheck ok: ${checks.length} calcule verificate`);
+  }
 })();

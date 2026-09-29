@@ -1,5 +1,8 @@
+/* Valorile comune site-ului. styles.css le folosește prin var(--nume).
+   Culorile de bază sunt sus; mai jos primesc roluri precum fundal, text sau contur. */
+
 :root {
-  /* ---------- Primitives ---------- */
+  /* Paleta de culori */
   --lapis-950: oklch(0.12 0.035 268);
   --lapis-900: oklch(0.16 0.05 266);
   --lapis-800: oklch(0.22 0.075 265);
@@ -30,7 +33,7 @@
   --sand-300: oklch(0.8 0.03 85);
   --sand-500: oklch(0.66 0.035 82);
 
-  /* ---------- Spacing: 8px base, spacious ---------- */
+  /* Spațiere: aceleași valori sunt refolosite în toată pagina */
   --space-0: 0;
   --space-1: 0.125rem;
   --space-2: 0.25rem;
@@ -46,11 +49,12 @@
   --space-12: 8rem;
   --space-13: 12rem;
 
-  /* ---------- Typography ---------- */
-  --font-family-display: "Hepta Slab", Rockwell, "Roboto Slab", Georgia, serif;
-  --font-family-body: "Gentium Book Plus", "Gentium Plus", "Iowan Old Style", "Palatino Linotype", Georgia, serif;
-  --font-family-mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
-  --font-family-glyph: "Noto Sans Egyptian Hieroglyphs", "Segoe UI Historic", sans-serif;
+  /* Fonturi și dimensiuni de text */
+  --font-family-display: 'Hepta Slab', Rockwell, 'Roboto Slab', Georgia, serif;
+  --font-family-body:
+    'Gentium Book Plus', 'Gentium Plus', 'Iowan Old Style', 'Palatino Linotype', Georgia, serif;
+  --font-family-mono: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+  --font-family-glyph: 'Noto Sans Egyptian Hieroglyphs', 'Segoe UI Historic', sans-serif;
 
   --font-size-xs: 0.8125rem;
   --font-size-sm: 0.9375rem;
@@ -77,7 +81,7 @@
   --letter-spacing-title: 0.06em;
   --letter-spacing-wide: 0.18em;
 
-  /* ---------- Layout ---------- */
+  /* Lățimi, margini și colțuri */
   --max-width-content: 40rem;
   --max-width-wide: 72rem;
   --max-width-page: 96rem;
@@ -88,7 +92,7 @@
   --border-radius-lg: 12px;
   --border-radius-full: 999px;
 
-  /* ---------- Motion ---------- */
+  /* Durata și ritmul tranzițiilor */
   --duration-instant: 50ms;
   --duration-fast: 150ms;
   --duration-normal: 250ms;
@@ -100,7 +104,7 @@
   --easing-in: cubic-bezier(0.4, 0, 1, 1);
   --easing-out: cubic-bezier(0.16, 1, 0.3, 1);
 
-  /* ---------- Breakpoints (reference; media queries cannot read these) ---------- */
+  /* Praguri de lățime orientative; regulile @media folosesc valorile direct */
   --breakpoint-sm: 375px;
   --breakpoint-md: 768px;
   --breakpoint-lg: 1024px;
@@ -108,9 +112,9 @@
   --breakpoint-2xl: 1536px;
 }
 
-/* ---------- Day: limestone, lapis ink ---------- */
+/* Tema deschisă, folosită la finalul poveștii */
 :root,
-[data-theme="light"] {
+[data-theme='light'] {
   color-scheme: light;
 
   --color-bg-primary: var(--limestone-50);
@@ -146,8 +150,8 @@
   --shadow-focus: 0 0 0 3px color-mix(in oklch, var(--lapis-600) 40%, transparent);
 }
 
-/* ---------- Night: lapis ground, sand text, one gold light ---------- */
-[data-theme="dark"] {
+/* Tema întunecată, folosită pe durata nopții */
+[data-theme='dark'] {
   color-scheme: dark;
 
   --color-bg-primary: var(--lapis-950);
@@ -183,8 +187,9 @@
   --shadow-focus: 0 0 0 3px color-mix(in oklch, var(--gold-400) 45%, transparent);
 }
 
+/* Dacă nu alegem explicit tema deschisă, ținem cont și de setarea sistemului. */
 @media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) {
+  :root:not([data-theme='light']) {
     color-scheme: dark;
     --color-bg-primary: var(--lapis-950);
     --color-bg-secondary: var(--lapis-900);

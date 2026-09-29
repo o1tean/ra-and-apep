@@ -1,1 +1,32 @@
-.DS_Store
+# Ignorăm tot; păstrăm doar fișierele folosite de site.
+*
+
+# Codul paginii și fișierele necesare pentru Git / GitHub Pages.
+!/.gitignore
+!/.nojekyll
+!/index.html
+!/main.js
+!/styles.css
+!/tokens.css
+
+# Deschidem folderele, apoi permitem doar imaginile încărcate în pagină.
+!/assets/
+!/assets/img/
+!/assets/img/apep-1376.webp
+!/assets/img/apep-2048.webp
+!/assets/img/apep-head.webp
+!/assets/img/barque.webp
+!/assets/img/battle-v2-1672.webp
+!/assets/img/battle-v2-960.webp
+!/assets/img/duat-v2-1672.webp
+!/assets/img/duat-v2-960.webp
+!/assets/img/horizon.webp
+!/assets/img/khepri.webp
+!/assets/img/ra.webp
+!/assets/img/reeds.webp
+!/assets/img/ritual-1376.webp
+!/assets/img/ritual-2048.webp
+!/assets/img/sky-dawn-1376.webp
+!/assets/img/sky-dawn-2048.webp
+!/assets/img/sky-dusk-1376.webp
+!/assets/img/sky-dusk-2048.webp
