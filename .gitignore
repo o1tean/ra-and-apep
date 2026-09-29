@@ -5,6 +5,8 @@
 !/.gitignore
 !/.nojekyll
 !/index.html
+!/favicon.svg
+!/favicon.ico
 !/main.js
 !/styles.css
 !/tokens.css
