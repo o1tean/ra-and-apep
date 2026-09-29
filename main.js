@@ -1,7 +1,3 @@
-// Ra & Apep — the scroll engine. No dependencies.
-// Every [data-scene] gets --p, a 0..1 progress eased toward the scroll position; CSS does the rest.
-// ponytail: one easing constant and CSS sub-ranges instead of timelines. If a scene ever needs
-// keyframed choreography that calc() cannot express, that is the moment for GSAP ScrollTrigger.
 (() => {
   'use strict';
 

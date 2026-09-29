@@ -1,17 +1,3 @@
-/* Ra & Apep — design tokens
-   Derived from: Art Deco / Geometric, taken back to its Egyptian Revival source, crossed with
-   Editorial for the reading passages (see .design/ra-and-apep/DESIGN_BRIEF.md).
-
-   Palette source: the four materials of Egyptian jewellery — gold, lapis lazuli, carnelian,
-   turquoise faience — plus limestone for daylight. Night ground is lapis, never neutral black.
-
-   Deviations from the design-tokens template, on purpose:
-   - The narrative owns the theme. <html> is always data-theme="dark" (the night) and the
-     dawn and after sections opt into data-theme="light" (the day). The prefers-color-scheme
-     block is kept so the file stays portable, but it never wins here.
-   - No bounce easing. Nothing in this world bounces.
-   - Spacing adds --space-13 for the rhythm between chapters. */
-
 :root {
   /* ---------- Primitives ---------- */
   --lapis-950: oklch(0.12 0.035 268);
