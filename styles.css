@@ -1332,6 +1332,8 @@ img.layer {
   text-align: center;
 }
 .restart__btn {
+  display: inline-flex;
+  align-items: center;
   min-height: 3.5rem;
   padding: 0 var(--space-9);
   font-family: var(--font-family-display);
@@ -1339,6 +1341,7 @@ img.layer {
   font-weight: var(--font-weight-medium);
   letter-spacing: var(--letter-spacing-wide);
   text-transform: uppercase;
+  text-decoration: none;
   color: var(--color-accent-primary);
   background: none;
   border: 1px solid var(--color-accent-primary);
