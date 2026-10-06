@@ -4,6 +4,7 @@
 # Codul paginii și fișierele necesare pentru Git / GitHub Pages.
 !/.gitignore
 !/.nojekyll
+!/README.md
 !/index.html
 !/favicon.svg
 !/favicon.ico
