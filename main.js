@@ -276,10 +276,6 @@
     }
   });
 
-  document.querySelector('.restart__btn').addEventListener('click', () => {
-    window.scrollTo({ top: 0, behavior: animationsEnabled() ? 'smooth' : 'instant' });
-  });
-
   function refreshLayout() {
     measureLayout(false);
     requestRender();
