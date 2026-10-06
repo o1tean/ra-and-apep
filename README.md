@@ -7,6 +7,9 @@ the Duat, stages the battle of the seventh hour, and ends at sunrise.
 
 - **Română** — <https://o1tean.github.io/ra-and-apep/>
 
+Questions about the story or the site? Ask in
+[Discussions](https://github.com/o1tean/ra-and-apep/discussions).
+
 ## Running it
 
 There is no build step and there are no dependencies. Open `index.html` in a
